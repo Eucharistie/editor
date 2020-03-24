@@ -1,5 +1,6 @@
 import React from 'react'
-import {Box, BaseStyles, Button, Heading, theme} from '@primer/components'
+import {Box, BaseStyles, Button, Heading} from '@primer/components'
+import AccountsUIWrapper from './BlazeUIWrapper'
 
 function loginWithFacebook() {
 	console.log("login with facebook")		
@@ -18,6 +19,10 @@ export const Login = () => (
 				</tbody>
 			</table>
 				
+		</Box>
+
+		<Box marginLeft={4}>
+			<AccountsUIWrapper />
 		</Box>
 	</BaseStyles>
 )
