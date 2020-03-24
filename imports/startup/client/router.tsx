@@ -2,13 +2,28 @@ import { Router, RouteComponentProps, navigate } from '@reach/router';
 
 import React from 'react';
 import { App } from '/imports/ui/App'
-import { Login } from '/imports/ui/Login/main'
+import { LoginPage } from '../../ui/Login/page'
 import { useAccount } from '/imports/api/accounts'
 
-const RoutedApp = (_properties: RouteComponentProps) => <App/>
-const RoutedLogin = (_properties: RouteComponentProps) => <Login/>
+interface Route {
+	path: string,
+	component: (_properties: RouteComponentProps<{}>) => JSX.Element
+}
 
-export const Routes = () => {
+export const mainRoutes: {[name: string]: Route} = {
+	dashboard: {
+		path: '/dashboard',
+		component: App
+	},
+	login: {
+		path: '/',
+		component: LoginPage
+	}
+}
+
+
+
+export const WebsiteRouter = () => {
 	const {isLoggedIn} = useAccount()
 
 	if (!isLoggedIn) {
@@ -17,9 +32,14 @@ export const Routes = () => {
 
 	return (
 		<Router>
-			<RoutedApp path="/dashboard" />
-			<RoutedLogin default/>
+			{
+				Object.entries(mainRoutes).map(([name, info]) =>
+					<info.component path={info.path} key={name} />
+				)
+			}
+
 			{/* <Route component={NotFoundPage}/> */}
 		</Router>
 	)
 };
+
