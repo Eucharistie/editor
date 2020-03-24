@@ -17,11 +17,9 @@ export const mainRoutes: {[name: string]: Route} = {
 	},
 	login: {
 		path: '/',
-		component: LoginPage
+		component: LoginPage,
 	}
 }
-
-
 
 export const WebsiteRouter = () => {
 	const {isLoggedIn} = useAccount()
@@ -38,7 +36,7 @@ export const WebsiteRouter = () => {
 				)
 			}
 
-			{/* <Route component={NotFoundPage}/> */}
+			{React.createElement(LoginPage, {default: true})}
 		</Router>
 	)
 };
