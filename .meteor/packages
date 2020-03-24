@@ -23,6 +23,4 @@ react-meteor-data       # React higher-order component for reactively tracking M
 accounts-facebook
 accounts-google
 accounts-twitter
-accounts-ui
-accounts-password
-jquery
+bozhao:link-accounts
