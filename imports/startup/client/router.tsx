@@ -17,8 +17,8 @@ export const Routes = () => {
 
 	return (
 		<Router>
-			<RoutedApp path="/" />
-			<RoutedLogin path="/login"/>
+			<RoutedApp path="/dashboard" />
+			<RoutedLogin default/>
 			{/* <Route component={NotFoundPage}/> */}
 		</Router>
 	)
