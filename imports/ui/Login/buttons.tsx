@@ -1,5 +1,5 @@
 import React, { ReactFragment, MouseEventHandler, Fragment } from 'react'
-import {Box, Button, Heading} from '@primer/components'
+import {Box, Button, Heading, Text} from '@primer/components'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faFacebook, IconDefinition, faYoutube, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import styled from 'styled-components'
@@ -8,15 +8,11 @@ import { navigate } from '@reach/router'
 import { mainRoutes } from '/imports/startup/client/router'
 
 export const LoginButtons = () => (
-	<Fragment>
-		<Heading as="h2" fontSize={3} mb={2}>Aanmelden</Heading>
-
-		<Table>
-			<LoginButton color="#FF001C" onClick={loginWithYoutube} title="YouTube" icon={faYoutube} />
-			<LoginButton color="#3B6AAE" onClick={loginWithFacebook} title="facebook" icon={faFacebook} />
-			<LoginButton color="#00A5ED" onClick={loginWithTwitter} title="Twitter" icon={faTwitter} />
-		</Table>
-	</Fragment>
+	<Table>
+		<LoginButton color="#FF001C" onClick={loginWithYoutube} title="YouTube" icon={faYoutube} />
+		<LoginButton color="#3B6AAE" onClick={loginWithFacebook} title="facebook" icon={faFacebook} />
+		<LoginButton color="#00A5ED" onClick={loginWithTwitter} title="Twitter" icon={faTwitter} />
+	</Table>
 )
 
 
