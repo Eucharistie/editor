@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import   React from 'react'
 import { render } from 'react-dom';
-import { WebsiteRouter } from '/imports/startup/client/router'
+import { WebsiteRouter } from '../imports/ui/Router/main/router'
 
 Meteor.startup(startup)
 

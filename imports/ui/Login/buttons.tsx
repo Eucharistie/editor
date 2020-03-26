@@ -5,7 +5,7 @@ import {faFacebook, IconDefinition, faYoutube, faTwitter} from '@fortawesome/fre
 import styled from 'styled-components'
 import { Meteor } from 'meteor/meteor'
 import { navigate } from '@reach/router'
-import { mainRoutes } from '/imports/startup/client/router'
+import { mainRoutes } from '../Router/main/router'
 
 export const LoginButtons = () => (
 	<Flex flexDirection={['column', 'row', 'column']} flexWrap={['nowrap', 'wrap', 'nowrap']} mx={-1} justifyContent='center'>
@@ -19,7 +19,7 @@ export const LoginButtons = () => (
 // Navigate to dashboard when logged in
 function handleLogin(error?: Error) {
 	if (error) {
-		console.log(error)
+		navigate(mainRoutes.login.path , {state: {loginError: error}})
 	} else {
 		navigate(mainRoutes.dashboard.path)
 	}
@@ -28,8 +28,6 @@ function handleLogin(error?: Error) {
 const loginWithYoutube  = () => Meteor.loginWithGoogle(  {}, handleLogin)
 const loginWithFacebook = () => Meteor.loginWithFacebook({}, handleLogin)
 const loginWithTwitter  = () => Meteor.loginWithTwitter( {}, handleLogin)
-
-
 
 // == Components == \\
 

@@ -2,7 +2,7 @@ import { Router, RouteComponentProps, navigate } from '@reach/router';
 
 import React from 'react';
 import { App } from '/imports/ui/App'
-import { LoginPage } from '../../ui/Login/page'
+import { LoginPage } from '../../Login/page'
 import { useAccount } from '/imports/api/accounts'
 
 interface Route {
@@ -17,7 +17,10 @@ export const mainRoutes: {[name: string]: Route} = {
 	},
 	login: {
 		path: '/',
-		component: LoginPage,
+		component: (props) => {
+			const state = props.location?.state as {loginError?: Error} | null
+			return <LoginPage loginError={state?.loginError}/>
+		}
 	}
 }
 
@@ -40,4 +43,3 @@ export const WebsiteRouter = () => {
 		</Router>
 	)
 };
-
