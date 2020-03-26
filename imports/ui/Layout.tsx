@@ -1,6 +1,5 @@
 export const centeredContainer = {
-//  query: extra-small small medium large
-	width:    [null,     1,    1,    900 ],
+	width: [ 1 ,   1  ,  1  ,  900 ],
 	marginX: "auto"
 }
 
@@ -10,3 +9,5 @@ export const containerPadding = {
 }
 
 export const paddedContainer = {...centeredContainer, ...containerPadding}
+
+export const blue = '#438dcc'
