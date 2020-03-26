@@ -1,5 +1,5 @@
-import React, { ReactFragment, MouseEventHandler, Fragment } from 'react'
-import {Box, Button, Heading, Text} from '@primer/components'
+import React, { MouseEventHandler } from 'react'
+import {Box, Button, Flex, Text} from '@primer/components'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faFacebook, IconDefinition, faYoutube, faTwitter} from '@fortawesome/free-brands-svg-icons'
 import styled from 'styled-components'
@@ -8,11 +8,11 @@ import { navigate } from '@reach/router'
 import { mainRoutes } from '/imports/startup/client/router'
 
 export const LoginButtons = () => (
-	<Table>
+	<Flex flexDirection={['column', 'row', 'column']} flexWrap={['nowrap', 'wrap', 'nowrap']} mx={-1} justifyContent='center'>
 		<LoginButton color="#FF001C" onClick={loginWithYoutube} title="YouTube" icon={faYoutube} />
 		<LoginButton color="#3B6AAE" onClick={loginWithFacebook} title="facebook" icon={faFacebook} />
 		<LoginButton color="#00A5ED" onClick={loginWithTwitter} title="Twitter" icon={faTwitter} />
-	</Table>
+	</Flex>
 )
 
 
@@ -31,26 +31,16 @@ const loginWithTwitter  = () => Meteor.loginWithTwitter( {}, handleLogin)
 
 
 
-// == Components == //
-
-const Table = (props: {children: ReactFragment}) => (
-	<table>
-		<tbody>{props.children}</tbody>
-	</table>
-)
+// == Components == \\
 
 // Login button with icon and text
 const LoginButton = (props: LoginButtonProps) => (
-	<tr>
-		<td>
-			<FullWidthButton mb={2} onClick={props.onClick}>
-				<Box color={props.color}>
-					<Icon icon={props.icon} size="2x"/>
-					<Box as="span" ml={2} verticalAlign="middle">{props.title}</Box>
-				</Box>
-			</FullWidthButton>
-		</td>
-	</tr>
+	<Button onClick={props.onClick} mx="1" mb='1' css='text-align: left'>
+		<Text color={props.color}>
+			<Icon icon={props.icon} size="2x"/>
+			<Box as="span" ml={2} verticalAlign="middle">{props.title}</Box>
+		</Text>
+	</Button>
 )
 interface LoginButtonProps {
 	title: String
@@ -58,11 +48,5 @@ interface LoginButtonProps {
 	color: any
 	onClick: MouseEventHandler
 }
-
-
-const FullWidthButton = styled(Button)`
-	width: 100%;
-	text-align: left;
-`
 
 const Icon = styled(FontAwesomeIcon)`vertical-align: middle`;

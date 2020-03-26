@@ -13,13 +13,15 @@ export const LoginPage = () => {
 
     return <BaseStyles>
         <Box backgroundColor="black" color="white" paddingY={50}>
-            <Flex width={900} marginX="auto" alignItems="center">
-                <Relative paddingRight={10} marginBottom={4}>
-                    <Heading fontSize={50}>Aanpassingen in een oogopslag</Heading>
-                    <Text fontSize={23}>
-                        Houd uw informatie actueel met deze editor. Pas je misuren of misteksten hier aan en geef honderden mensen toegang tot jouw recentste informatie.
-                    </Text>
-                </Relative>
+            <Flex width={[null, 1, 1, 900]} marginX="auto" paddingX={[4,4,4,0]} alignItems="center" flexWrap={['wrap', 'wrap', 'nowrap']} justifyContent='center'>
+                <Text textAlign={['left', 'center', 'left']}>
+                    <Relative paddingRight={[3, null, 5, 10]} marginBottom={4}>
+                        <Heading fontSize={[35, 50]}>Aanpassingen in een oogopslag</Heading>
+                        <Text fontSize={[18, 23]}>
+                            Houd uw informatie actueel met deze editor. Pas je misuren of misteksten hier aan en geef honderden mensen toegang tot jouw recentste informatie.
+                        </Text>
+                    </Relative>
+                </Text>
                 {isLoggedIn ? <RedirectButton/> : <SignUpWindow/>}
             </Flex>
         </Box>
@@ -31,8 +33,8 @@ const SignUpWindow = () => (
         <Heading as="h2" fontSize={3} mb={2}>Aanmelden</Heading>
         <Text>Meld je aan met een social netwerk account en ga aan de slag:</Text>
 
-        <Box marginX={5} marginTop={3}>
-            <LoginButtons />
+        <Box marginTop={3}>
+            <LoginButtons/>
         </Box>
     </BorderBox>
 )
