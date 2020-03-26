@@ -5,18 +5,19 @@ import Octicon, {ArrowRight} from '@primer/octicons-react'
 import { useAccount } from '/imports/api/accounts'
 import { navigate } from '@reach/router'
 import { mainRoutes } from '../Router/main/router'
+import { paddedContainer } from '/imports/ui/Layout'
 
 export const LoginPage = (properties: {loginError?: Error}) => {
 	const {isLoggedIn} = useAccount()
 
-	return (<BaseStyles>
+	return <BaseStyles>
 		<Box backgroundColor="black" color="white" paddingY={50}>
-			<Flex width={[null, 1, 1, 900]} marginX="auto" paddingX={[4,4,4,0]} alignItems="center" flexWrap={['wrap', 'wrap', 'nowrap']} justifyContent='center'>
+			<Flex {...paddedContainer} alignItems="center" flexWrap={['wrap', 'wrap', 'nowrap']} justifyContent='center'>
 				<HeroText />
 				{isLoggedIn ? <RedirectButton/> : <SignUpWindow loginError={properties.loginError}/>}
 			</Flex>
 		</Box>
-	</BaseStyles>)
+	</BaseStyles>
 }
 
 const HeroText = () => (

@@ -1,7 +1,7 @@
 import { Router, RouteComponentProps, navigate } from '@reach/router';
 
 import React from 'react';
-import { App } from '/imports/ui/App'
+import { Dashboard } from '/imports/ui/App'
 import { LoginPage } from '../../Login/page'
 import { useAccount } from '/imports/api/accounts'
 
@@ -13,7 +13,7 @@ interface Route {
 export const mainRoutes: {[name: string]: Route} = {
 	dashboard: {
 		path: '/dashboard',
-		component: App
+		component: Dashboard
 	},
 	login: {
 		path: '/',
