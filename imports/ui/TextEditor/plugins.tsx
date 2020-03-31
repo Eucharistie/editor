@@ -15,7 +15,6 @@ import { EditorState, Transaction } from "prosemirror-state";
 function insertHardBreak(state: EditorState, dispatch?: (tr: Transaction) => boolean) {
     if (dispatch) {
         dispatch(state.tr
-            .removeMark(state.selection.$from.parentOffset, state.selection.$from.pos, schema.marks.splittedText)
             .replaceSelectionWith(schema.nodes.hard_break.create())
         )
     }
