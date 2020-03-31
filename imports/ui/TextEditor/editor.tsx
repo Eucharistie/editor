@@ -8,6 +8,7 @@ import {plugins} from './plugins'
 interface TextEditorProps {
 	editorStateJSON: any
 	onStateChange: (state: EditorState) => void
+	editable?: boolean
 }
 
 export class TextEditor extends React.Component<TextEditorProps> {
@@ -33,6 +34,7 @@ export class TextEditor extends React.Component<TextEditorProps> {
 		const editor = this
 
 		const state = this.props.editorStateJSON ? this.parseJSON() : EditorState.create({schema, plugins});
+		const editable = this.props.editable ?? true
 
 		if (this.editorDomNode.current) {
 			const mount = {mount: this.editorDomNode.current}
@@ -50,7 +52,8 @@ export class TextEditor extends React.Component<TextEditorProps> {
 								view.updateState(newState)
 							}
 						}
-					}
+					},
+					editable: () => editable
 				}
 			)
 			console.log(this.prose)
