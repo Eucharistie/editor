@@ -25,7 +25,7 @@ export const WebsiteRouter = () => {
 	const {isLoggedIn} = useAccount()
 
 	if (!isLoggedIn) {
-		navigate("/login")
+		navigate("/")
 	}
 
 	return (
