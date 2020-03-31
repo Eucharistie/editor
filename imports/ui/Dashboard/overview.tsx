@@ -6,7 +6,7 @@ import { AccountsManager } from './Apps/AccountManager/main';
 import { TopNavigationBar } from '../top-navigation-bar'
 import { Link, Router, RouteComponentProps } from '@reach/router'
 import { RouteProtocol } from '/imports/ui/Router/protocol'
-import { StreamOverview } from './Apps/Streams/overview';
+import { StreamsRouter } from './Apps/Streams/router';
 
 interface DashboardAppInfo extends RouteProtocol {
 	title: string
@@ -20,8 +20,8 @@ const apps: DashboardAppInfo[] = [
 	},
 	{
 		title: 'Streams',
-		component: StreamOverview,
-		path: 'streams'
+		component: StreamsRouter,
+		path: 'streams/*'
 	}
 ]
 

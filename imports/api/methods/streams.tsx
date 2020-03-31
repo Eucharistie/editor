@@ -10,7 +10,7 @@ Meteor.methods({
 		check(userId, String)
 		
 		if (userId) {
-			StreamsCollection.insert(
+			return StreamsCollection.insert(
 				{
 					createdAt: new Date(),
 					editorIds: [userId]
