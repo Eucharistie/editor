@@ -44,7 +44,11 @@ export class TextEditor extends React.Component<TextEditorProps> {
 						const view = editor.prose
 						if (view) {
 							const newState = view.state.apply(transaction)
-							editor.props.onStateChange(newState)
+							if (transaction.docChanged) {
+								editor.props.onStateChange(newState)
+							} else {
+								view.updateState(newState)
+							}
 						}
 					}
 				}
