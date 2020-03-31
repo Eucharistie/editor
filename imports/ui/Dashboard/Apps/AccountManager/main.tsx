@@ -23,6 +23,5 @@ export const AccountsManager = () => <ThemeProvider theme={theme}>
 			<Info />
 		</BorderBox>
 	</Flex>
-
 </BaseStyles>
 </ThemeProvider>
