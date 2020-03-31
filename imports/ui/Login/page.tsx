@@ -5,7 +5,7 @@ import Octicon, {ArrowRight} from '@primer/octicons-react'
 import { useAccount } from '/imports/api/accounts'
 import { navigate } from '@reach/router'
 import { mainRoutes } from '../Router/main/router'
-import { paddedContainer } from '/imports/ui/Layout'
+import { paddedContainer } from '../style'
 
 export const LoginPage = (properties: {loginError?: Error}) => {
 	const {isLoggedIn} = useAccount()
