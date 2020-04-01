@@ -7,7 +7,7 @@ export interface Stream {
 	createdAt: Date
 	editorIds: string[]
 	text?: any,
-	tagFrom: number
+	tagFrom: number,
 }
 
 export const StreamsCollection = new Mongo.Collection<Stream>('streams');

@@ -1,5 +1,9 @@
 import React from 'react';
-import { Box, ButtonPrimary } from '@primer/components';
+import {
+	Box,
+	Button,
+	ButtonPrimary
+} from '@primer/components';
 import {paddedContainer} from '/imports/ui/style'
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
@@ -27,13 +31,13 @@ export const StreamOverview = () => {
 	}
 
 	return <Box {...paddedContainer} marginTop={2}>
-		<table>
+		<ButtonPrimary onClick={addStream}>Add stream</ButtonPrimary>
+		<table css='width: 100%'>
 			<thead>
 				<tr>
+					<td>Stream</td>
 					<td>Created at</td>
-					<td>
-						<ButtonPrimary onClick={addStream}>Add stream</ButtonPrimary>
-					</td>
+					<td>Quick actions</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -45,5 +49,9 @@ export const StreamOverview = () => {
 
 const StreamRow = (stream: Stream) => <tr key={stream._id}>
 	<td><Link to={stream._id!}>{stream.title ?? stream.videoId ?? 'No id'}</Link></td>
-	<td> <TimeAgo datetime={stream.createdAt}/></td>
+	<td><TimeAgo datetime={stream.createdAt}/></td>
+	<td>
+		<Button>/</Button>
+		<Button>/</Button>
+	</td>
 </tr>

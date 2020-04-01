@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {Stream, StreamsCollection} from '/imports/api/collections/Streams'
 import {
 	BaseStyles,
-	BorderBox,
 	Box,
 	Button,
 	ButtonDanger,
@@ -19,7 +18,10 @@ import {faYoutube} from '@fortawesome/free-brands-svg-icons'
 import {faWifi, faTrash } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {} from 'styled-components/cssprop'
-import {navigate} from "@reach/router";
+import {
+	Link,
+	navigate
+} from "@reach/router";
 
 
 export const StreamDetails = (props: {stream: Stream}) => {
@@ -86,8 +88,12 @@ export const StreamDetails = (props: {stream: Stream}) => {
 				/>
 			</Box>
 			<Flex>
-				<Button><PaddedIcon icon={faYoutube} size={"lg"}/> Sync Recording</Button>
-				<Button><PaddedIcon icon={faWifi}/> Sync Live</Button>
+				<Link to={"recording"}>
+					<Button><PaddedIcon icon={faYoutube} size={"lg"}/> Sync Recording</Button>
+				</Link>
+				<Link to={"live"}>
+					<Button><PaddedIcon icon={faWifi}/> Sync Live</Button>
+				</Link>
 			</Flex>
 			<Box marginTop={2}>
 				<TextEditor
