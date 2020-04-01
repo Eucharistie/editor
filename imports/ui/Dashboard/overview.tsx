@@ -9,19 +9,22 @@ import { RouteProtocol } from '/imports/ui/Router/protocol'
 import { StreamsRouter } from './Apps/Streams/router';
 
 interface DashboardAppInfo extends RouteProtocol {
-	title: string
+	title: string,
+	link: string
 }
 
 const apps: DashboardAppInfo[] = [
 	{
 		title: 'Accounts',
 		component: AccountsManager,
-		path: 'accounts'
+		path: 'accounts',
+		link: 'accounts'
 	},
 	{
 		title: 'Streams',
 		component: StreamsRouter,
-		path: 'streams/*'
+		path: 'streams/*',
+		link: 'streams'
 	}
 ]
 
@@ -42,7 +45,7 @@ const Overview = (props: RouteComponentProps) => <Flex {...paddedContainer} marg
 	{apps.map(Card)}
 </Flex>
 
-const Card = (info: DashboardAppInfo) => <Link to={info.path} key={info.path}>
+const Card = (info: DashboardAppInfo) => <Link to={info.link} key={info.path}>
 	<BorderBox p={4} key={info.path}>
 		<Text>{info.title}</Text>
 	</BorderBox>

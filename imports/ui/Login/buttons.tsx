@@ -21,7 +21,7 @@ function handleLogin(error?: Error) {
 	if (error) {
 		navigate(mainRoutes.login.path , {state: {loginError: error}})
 	} else {
-		navigate(mainRoutes.dashboard.path)
+		navigate('/dashboard')
 	}
 }
 

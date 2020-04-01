@@ -4,7 +4,6 @@ import { BaseStyles, Flex, Heading, Relative, Text, Box, BorderBox, Button } fro
 import Octicon, {ArrowRight} from '@primer/octicons-react'
 import { useAccount } from '/imports/api/accounts'
 import { navigate } from '@reach/router'
-import { mainRoutes } from '../Router/main/router'
 import { paddedContainer } from '../style'
 
 export const LoginPage = (properties: {loginError?: Error}) => {
@@ -45,7 +44,7 @@ const SignUpWindow = (properties: {loginError?: Error}) => (
 )
 
 const RedirectButton = () => (
-	<Button onClick={ () => navigate(mainRoutes.dashboard.path) }>
+	<Button onClick={ () => navigate('/dashboard') }>
 		<Text marginRight={2}>Ga naar het dashboard</Text>
 		<Octicon icon={ArrowRight}/>
 	</Button>

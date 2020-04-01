@@ -1,5 +1,8 @@
 import React from 'react';
-import { Router } from '@reach/router';
+import {
+	Link,
+	Router
+} from '@reach/router';
 import { RouteComponentProps } from '@reach/router'
 import { StreamOverview } from './overview'
 import { StreamDetails } from './editor'
@@ -25,7 +28,7 @@ function StreamRouter(route: RouteComponentProps & {streamID?: string}) {
 		return StreamsCollection.findOne(route.streamID)
 	}, [])
 
-	if (stream == undefined) return <p>Stream not found</p>
+	if (stream == undefined) return <p>Stream not found. <Link to='../'>Go to overview</Link></p>
 
 	return <Router>
 		<RenderDetails stream={stream} path='/' />
