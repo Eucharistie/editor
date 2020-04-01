@@ -13,6 +13,7 @@ export function normalize(transaction: Transaction, countFrom: number) {
 	let newTransaction = transaction
 	const ids = new Set<number>()
 
+	let maxId = 0
 	let previousNode: ProseNode|null = null
 	let previousId: number|null = null
 	let previousParent: ProseNode|null = null
@@ -47,6 +48,7 @@ export function normalize(transaction: Transaction, countFrom: number) {
 
 		previousNode = node
 		previousParent = parent
+		maxId = Math.max(maxId, previousId ?? 0)
 
 		function addNewTag(newId: number) {
 			newTransaction = newTransaction.addMark(pos, pos+node.nodeSize, schema.marks.taggedLine.create({id: newId}))
@@ -54,7 +56,7 @@ export function normalize(transaction: Transaction, countFrom: number) {
 			previousId = newId
 		}
 	})
-	return {transaction: newTransaction, lastId: previousId}
+	return {transaction: newTransaction, lastId: maxId}
 }
 
 function hasLineTag(textNode: ProseNode<typeof schema>) {
