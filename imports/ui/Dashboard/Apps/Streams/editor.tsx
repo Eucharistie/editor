@@ -7,9 +7,10 @@ import { TextEditor } from '/imports/ui/TextEditor/editor'
 import { EditorState } from 'prosemirror-state';
 
 export const StreamDetails = (stream: Stream) => {
-	function updateStream(textState: EditorState) {
+	function updateStream(textState: EditorState, lastId: number | null) {
 		StreamsCollection.update(stream._id!, {$set: {
-			text: textState.toJSON()
+			text: textState.toJSON(),
+			tagFrom: lastId ?? 0
 		}})
 	}
 
@@ -19,7 +20,7 @@ export const StreamDetails = (stream: Stream) => {
 			<Box>
 				Video ID: <TextInput value={stream.videoId}/> <Button>Save</Button>
 			</Box>
-			<TextEditor onStateChange={updateStream} editorStateJSON={stream.text}/>
+			<TextEditor onStateChange={updateStream} editorStateJSON={stream.text} counter={stream.tagFrom ?? 0}/>
 		</Box>
 	)
 }

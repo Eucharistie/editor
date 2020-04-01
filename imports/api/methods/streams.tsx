@@ -13,7 +13,8 @@ Meteor.methods({
 			return StreamsCollection.insert(
 				{
 					createdAt: new Date(),
-					editorIds: [userId]
+					editorIds: [userId],
+					tagFrom: 0
 				}
 			)
 		}

@@ -5,12 +5,13 @@ import {EditorView} from "prosemirror-view"
 import {schema} from './schema'
 import {plugins} from './plugins'
 import styled from 'styled-components'
-import { Node as ProseNode, Schema } from 'prosemirror-model'
+import { Node as ProseNode, Mark } from 'prosemirror-model'
 
 interface TextEditorProps {
 	editorStateJSON: any
-	onStateChange: (state: EditorState) => void
-	editable?: boolean
+	onStateChange: (state: EditorState, lastId: number | null) => void
+	editable?: boolean,
+	counter: number
 }
 
 export class TextEditor extends React.Component<TextEditorProps> {
@@ -29,7 +30,9 @@ export class TextEditor extends React.Component<TextEditorProps> {
 	}
 
 	parseJSON() {
-		return EditorState.fromJSON({schema, plugins}, this.props.editorStateJSON)
+		const state = EditorState.fromJSON({schema, plugins}, this.props.editorStateJSON)
+		setTimeout(()=> validateState(state), 200)
+		return state
 	}
 
 	componentDidMount() {
@@ -48,8 +51,9 @@ export class TextEditor extends React.Component<TextEditorProps> {
 						const view = editor.prose
 						if (view) {
 							if (transaction.docChanged) {
-								const newState = view.state.apply(normalize(transaction))
-								editor.props.onStateChange(newState)
+								const normalisation = normalize(transaction, editor.props.counter)
+								const newState = view.state.apply(normalisation.transaction)
+								editor.props.onStateChange(newState, normalisation.lastId)
 							} else {
 								view.updateState(view.state.apply(transaction))
 							}
@@ -71,68 +75,78 @@ const StyledEditor = styled.div`
 }
 `
 
-
-const uniqueId = (function() {
-	let counter = 0
-	return function(): number {
-		return counter++
-	}
-})()
-
-function normalize(transaction: Transaction) {
-	// normChildren(transaction.doc)
-	// console.log(transaction.doc)
-	let position = -1
-	let lineStart = position
-	let lineEnd = position
-	let lineId: number|null = null
+function normalize(transaction: Transaction, countFrom: number) {
+	const uniqueId = (function() {
+		let counter = countFrom + 1
+		return function(): number {
+			return counter++
+		}
+	})()
 
 	let newTransaction = transaction
-	let ids = new Set<number>()
-	normChildren(transaction.doc)
-	return newTransaction
+	const ids = new Set<number>()
 
-	function normChildren(node: ProseNode) {
-		position += 1;
-		// @ts-ignore
-		const children = node.content.content as! ProseNode[]
-		lineStart = position
-		lineEnd = position
-		for (let cursor = 0; cursor<children.length; cursor++) {
-			const node = children[cursor]
-			if (node.isText) {
-				position += node.nodeSize
-				lineEnd = position
-				if (lineId == null) {
-					const lineTag = hasLineTag(node)
-					if (lineTag && !ids.has(lineTag.attrs.id)) lineId = lineTag.attrs.id
-				}
-			} else {
-				if (lineEnd > lineStart) { mark() }
-				if (node.isLeaf) {
-					position += 1
-					lineStart = lineEnd = position
-				}
-				else normChildren(node)
+	let previousNode: ProseNode|null = null
+	let previousId: number|null = null
+	let previousParent: ProseNode|null = null
+	transaction.doc.descendants(function(node, pos, parent) {
+		if (node.isText) {
+			let canMerge = false
+			if (previousNode?.isText && parent == previousParent) {
+				const previousMarks = allMarksExceptTag(previousNode)
+				const currentMarks = allMarksExceptTag(node)
+				canMerge = Mark.sameSet(previousMarks, currentMarks)
 			}
+			if (canMerge && previousId !== null) {
+				newTransaction = newTransaction.removeMark(pos, pos+node.nodeSize, schema.marks.taggedLine)
+				addNewTag(previousId)
+			} else {
+				const tag = hasLineTag(node)
+				if (tag) {
+					if (ids.has(tag.attrs.id)) {
+						newTransaction = newTransaction.removeMark(pos, pos+node.nodeSize, schema.marks.taggedLine)
+						addNewTag(uniqueId())
+					} else {
+						ids.add(tag.attrs.id)
+						previousId = tag.attrs.id
+					}
+				} else {
+					addNewTag(uniqueId())
+				}
+			}
+		} else if (node.isLeaf) {
+			newTransaction = newTransaction.removeMark(pos, pos+node.nodeSize)
 		}
-		if (lineEnd > lineStart) { mark() }
-		position += 1
-	}
 
-	function mark() {
-		newTransaction = transaction.removeMark(lineStart, lineEnd+1, schema.marks.taggedLine)
-		let newId = lineId ?? uniqueId()
-		lineId = null
-		newTransaction = transaction.addMark(
-			lineStart, lineEnd,
-			schema.marks.taggedLine.create({id: newId})
-		)
-		ids.add(newId)
-		lineStart = lineEnd = position
-	}
+		previousNode = node
+		previousParent = parent
+
+		function addNewTag(newId: number) {
+			newTransaction = newTransaction.addMark(pos, pos+node.nodeSize, schema.marks.taggedLine.create({id: newId}))
+			ids.add(newId)
+			previousId = newId
+		}
+	})
+	return {transaction: newTransaction, lastId: previousId}
 }
 
 function hasLineTag(textNode: ProseNode<typeof schema>) {
 	return schema.marks.taggedLine.isInSet(textNode.marks)
+}
+
+function allMarksExceptTag(node: ProseNode) {
+	return node.marks.filter(mark => mark.type != schema.marks.taggedLine)
+}
+
+function validateState(state: EditorState) {
+	const ids = new Set<number>()
+	state.doc.descendants(function(node) {
+		const tag = hasLineTag(node)
+		if (tag) {
+			if (ids.has(tag.attrs.id)) {
+				console.log('Found duplicate tag', tag.attrs.id)
+			}
+			ids.add(tag.attrs.id)
+		}
+	})
 }
