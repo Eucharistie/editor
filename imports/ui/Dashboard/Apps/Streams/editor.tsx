@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
 import {Stream, StreamsCollection} from '/imports/api/collections/Streams'
 import {
+	BaseStyles,
+	BorderBox,
 	Box,
 	Button,
 	ButtonDanger,
+	Dialog,
 	Flex,
-	TextInput
+	TextInput,
 } from '@primer/components'
 import moment from 'moment'
 import { paddedContainer } from '/imports/ui/style';
@@ -15,11 +18,13 @@ import YouTube from '@u-wave/react-youtube'
 import {faYoutube} from '@fortawesome/free-brands-svg-icons'
 import {faWifi, faTrash } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {} from 'styled-components/cssprop'
+import {navigate} from "@reach/router";
 
 
-export const StreamDetails = (stream: Stream) => {
+export const StreamDetails = (props: {stream: Stream}) => {
 	function updateStream(textState: EditorState, lastId: number | null) {
-		StreamsCollection.update(stream._id!, {$set: {
+		StreamsCollection.update(props.stream._id!, {$set: {
 			text: textState.toJSON(),
 			tagFrom: lastId ?? 0
 		}})
@@ -28,7 +33,7 @@ export const StreamDetails = (stream: Stream) => {
 	const [player, setPlayer] = useState(null as YT.Player|null);
 
 	function changeId(event: React.ChangeEvent<HTMLInputElement>) {
-		StreamsCollection.update(stream._id!, {$set: {videoId: event.target.value}})
+		StreamsCollection.update(props.stream._id!, {$set: {videoId: event.target.value}})
 		setTimeout(() => {
 			player?.seekTo(0, true)
 			player?.pauseVideo()
@@ -37,7 +42,6 @@ export const StreamDetails = (stream: Stream) => {
 
 	function initPlayer(event: YT.PlayerEvent) {
 		setPlayer(event.target)
-		console.log(event.target)
 	}
 
 	function logError(error: any) {
@@ -48,25 +52,63 @@ export const StreamDetails = (stream: Stream) => {
 		const player = state.target as YT.Player & {getVideoData(): VideoData}
 		const data = player.getVideoData()
 		if (data && data.title.length > 0) {
-			StreamsCollection.update(stream._id!, {$set: {title: data.title}})
+			StreamsCollection.update(props.stream._id!, {$set: {title: data.title}})
 		}
+	}
+
+	let [removeDialogIsOpen, openRemoveDialog] = useState(false)
+
+	async function removeStream(_: React.MouseEvent) {
+		await navigate( '/dashboard/streams')
+		StreamsCollection.remove(props.stream._id!, function(error?: Error) {
+			if (error) {
+				navigate( '/dashboard/streams/'+props.stream._id!)
+			}
+		})
 	}
 
 	return (
 		<Box {...paddedContainer} marginTop={2}>
 			<p>
-				Video ID: <TextInput value={stream.videoId} onChange={changeId}/>
-				<ButtonDanger><PaddedIcon icon={faTrash}/> Delete stream</ButtonDanger>
+				Video ID: <TextInput value={props.stream.videoId ?? ''} onChange={changeId}/>
+				<ButtonDanger onClick={_ => openRemoveDialog(true)}>
+					<PaddedIcon icon={faTrash}/> Delete stream
+				</ButtonDanger>
 			</p>
-			<p>Created at: {moment(stream.createdAt).format()}</p>
+			<p>Created at: {moment(props.stream.createdAt).format()}</p>
 			<Box marginY={2}>
-				<YouTube video={stream.videoId} playsInline={true} onReady={initPlayer} onError={logError} onStateChange={stateChanged}></YouTube>
+				<YouTube
+					video={props.stream.videoId}
+					playsInline={true}
+					onReady={initPlayer}
+					onError={logError}
+					onStateChange={stateChanged}
+				/>
 			</Box>
 			<Flex>
 				<Button><PaddedIcon icon={faYoutube} size={"lg"}/> Sync Recording</Button>
 				<Button><PaddedIcon icon={faWifi}/> Sync Live</Button>
 			</Flex>
-			<TextEditor onStateChange={updateStream} editorStateJSON={stream.text} counter={stream.tagFrom ?? 0}/>
+			<Box marginTop={2}>
+				<TextEditor
+					onStateChange={updateStream}
+					editorStateJSON={props.stream.text}
+					counter={props.stream.tagFrom ?? 0}
+				/>
+			</Box>
+
+
+			<Dialog title='Stream verwijderen?' isOpen={removeDialogIsOpen} onDismiss={()=>openRemoveDialog(false)}>
+				<BaseStyles>
+					<Box paddingBottom={2} paddingX={3}>
+						<p>Al je tekst en de synchronisatie zullen verloren gaan en kunnen niet meer teruggehaald worden. Ben je zeker dat je door wil gaan?</p>
+
+						<Box>
+							<ButtonDanger css='width: 100%' onClick={removeStream}>Verwijder</ButtonDanger>
+						</Box>
+					</Box>
+				</BaseStyles>
+			</Dialog>
 		</Box>
 	)
 }

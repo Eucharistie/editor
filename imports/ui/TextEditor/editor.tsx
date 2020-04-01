@@ -1,6 +1,6 @@
 import React from 'react'
 // Prose mirror
-import {EditorState, Transaction} from "prosemirror-state"
+import {EditorState} from "prosemirror-state"
 import {EditorView} from "prosemirror-view"
 import {schema} from './schema'
 import {plugins} from './plugins'
@@ -62,9 +62,6 @@ export class TextEditor extends React.Component<TextEditorProps> {
 					editable: () => editable
 				}
 			)
-			console.log(this.prose)
-		} else {
-			console.log('node not found')
 		}
 	}
 }

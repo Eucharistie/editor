@@ -4,25 +4,25 @@ import { RouteComponentProps } from '@reach/router'
 import { StreamOverview } from './overview'
 import { StreamDetails } from './editor'
 import { StreamsCollection } from '/imports/api/collections/Streams';
+import {useTracker} from "meteor/react-meteor-data";
 
 const RenderOverview = (_: RouteComponentProps) => <StreamOverview />
 
 export function StreamsRouter() {
 	return <Router>
 		<RenderOverview path='/' />
-		<StreamRouter path=':streamID' />
+		<RenderDetails path=':streamID' />
 	</Router>
 }
 
-function RenderDetails(route: RouteComponentProps & {streamID?: string}) {
-	const stream = StreamsCollection.findOne(route.streamID)
-	if (stream) {
-		return StreamDetails(stream)
-	} else {
-		return <p>Stream not found</p>
-	}
-}
+const RenderDetails = (route: RouteComponentProps & {streamID?: string}) => {
+	const stream = useTracker(() => {
+		return StreamsCollection.findOne(route.streamID)
+	}, [])
 
-export const StreamRouter = (_: RouteComponentProps) => <Router>
-	<RenderDetails path="/" />
-</Router>
+	if (stream) {
+		return <StreamDetails stream={stream} />
+	}
+
+	return <p>Stream not found</p>
+}

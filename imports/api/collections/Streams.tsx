@@ -26,5 +26,10 @@ StreamsCollection.allow({
 		}
 
 		return false
+	},
+
+	remove(userId: string, doc: Stream) {
+		if (doc.editorIds.includes(userId)) return true
+		return false
 	}
 })
