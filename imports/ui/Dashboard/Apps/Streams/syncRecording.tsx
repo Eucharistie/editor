@@ -2,9 +2,9 @@ import React from 'react'
 import {Stream} from "/imports/api/collections/Streams";
 import {paddedContainer} from "/imports/ui/style";
 import {Box} from "@primer/components";
-import {TextEditor} from "/imports/ui/TextEditor/editor";
 import YouTube from "@u-wave/react-youtube";
 import {useState} from "react";
+import { TextLinker } from '/imports/ui/TextEditor/viewer';
 
 export const SyncRecording = (props: {stream: Stream}) => {
     const [player, setPlayer] = useState(null as null|YT.Player)
@@ -19,11 +19,9 @@ export const SyncRecording = (props: {stream: Stream}) => {
             playsInline={true}
             onReady={initPlayer}
         />
-        <TextEditor
+        <TextLinker
             editorStateJSON={props.stream.text}
-            onStateChange={_=>{}}
-            counter={props.stream.tagFrom}
-            editable={false}
+            onLinkTag={(_)=>{ }}
         />
     </Box>
 }

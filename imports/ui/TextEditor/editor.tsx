@@ -1,67 +1,51 @@
-import React from 'react'
 // Prose mirror
 import {EditorState} from "prosemirror-state"
-import {EditorView} from "prosemirror-view"
-import {schema} from './schema'
-import {plugins} from './plugins'
-import {normalize, validateState} from './tagger'
-import {StyledEditor} from './style'
+import {DirectEditorProps} from "prosemirror-view"
+
+import {normalize} from './tagger'
+import { ProseBase } from './base'
+import styled from 'styled-components'
 
 interface TextEditorProps {
-	editorStateJSON: any
 	onStateChange: (state: EditorState, lastId: number | null) => void
-	editable?: boolean,
 	counter: number
 }
 
-export class TextEditor extends React.Component<TextEditorProps> {
-
-	editorDomNode: React.RefObject<HTMLDivElement> = React.createRef()
-	prose?: EditorView
-
-	render() {
-		return <StyledEditor ref={this.editorDomNode}>This is a text editor</StyledEditor>
-	}
-
-	componentDidUpdate() {
-		if (this.props.editorStateJSON) {
-			this.prose?.updateState(this.parseJSON())
-		}
-	}
-
-	parseJSON() {
-		const state = EditorState.fromJSON({schema, plugins}, this.props.editorStateJSON)
-		setTimeout(()=> validateState(state), 200)
-		return state
-	}
-
-	componentDidMount() {
+class UnstyledTextEditor extends ProseBase<TextEditorProps> {
+	getConfiguration(): DirectEditorProps {
 		const editor = this
-
-		const state = this.props.editorStateJSON ? this.parseJSON() : EditorState.create({schema, plugins});
-		const editable = this.props.editable ?? true
-
-		if (this.editorDomNode.current) {
-			const mount = {mount: this.editorDomNode.current}
-			this.prose = new EditorView(
-				mount,
-				{
-					state,
-					dispatchTransaction(transaction) {
-						const view = editor.prose
-						if (view) {
-							if (transaction.docChanged) {
-								const normalisation = normalize(transaction, editor.props.counter)
-								const newState = view.state.apply(normalisation.transaction)
-								editor.props.onStateChange(newState, normalisation.lastId)
-							} else {
-								view.updateState(view.state.apply(transaction))
-							}
-						}
-					},
-					editable: () => editable
+		return {
+			dispatchTransaction(transaction) {
+				const view = editor.prose
+				if (view) {
+					if (transaction.docChanged) {
+						const normalisation = normalize(transaction, editor.props.counter)
+						const newState = view.state.apply(normalisation.transaction)
+						editor.props.onStateChange(newState, normalisation.lastId)
+					} else {
+						view.updateState(view.state.apply(transaction))
+					}
 				}
-			)
+			},
+			...super.getConfiguration()
 		}
 	}
 }
+
+export const TextEditor = styled(UnstyledTextEditor)`
+margin-top: 8px;
+min-height: 5em;
+
+@font-face {
+    font-family: "Liturgy";
+    src: url("/liturgy.woff2") format("woff2");
+}
+
+.tagged:hover {
+	background: #eee4c3
+}
+
+.tagged {
+	//display: inline-block
+}
+`
