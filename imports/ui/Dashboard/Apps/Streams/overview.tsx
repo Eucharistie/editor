@@ -44,6 +44,6 @@ export const StreamOverview = () => {
 }
 
 const StreamRow = (stream: Stream) => <tr key={stream._id}>
-	<td><Link to={stream._id!}>{stream.videoId ?? 'No id'}</Link></td>
+	<td><Link to={stream._id!}>{stream.title ?? stream.videoId ?? 'No id'}</Link></td>
 	<td> <TimeAgo datetime={stream.createdAt}/></td>
 </tr>

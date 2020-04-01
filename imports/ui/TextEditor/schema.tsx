@@ -40,7 +40,6 @@ const taggedLine = {
         {
             tag: 'span',
             getAttrs(content: string | HTMLElement) {
-                console.log(content)
                 if (content instanceof HTMLElement && content.classList.contains('tagged')) {
                     const start = content.className.indexOf('tag-')
                     const next = content.className.indexOf(' ', start)

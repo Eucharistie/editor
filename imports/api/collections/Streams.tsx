@@ -3,6 +3,7 @@ import { Mongo } from 'meteor/mongo';
 export interface Stream {
 	_id?: string
 	videoId?: string
+	title?: string
 	createdAt: Date
 	editorIds: string[]
 	text?: any,
@@ -18,7 +19,7 @@ StreamsCollection.allow({
 		if (doc.editorIds.includes(userId)) {
 			if (fieldNames.length == 1) {
 				const field = fieldNames[0]
-				return ['editorIds', 'videoId'].includes(field)
+				return ['editorIds', 'videoId', 'title'].includes(field)
 			} else if (fieldNames.length == 2) {
 				return textUpdateFields.has(fieldNames[0]) && textUpdateFields.has(fieldNames[1])
 			}

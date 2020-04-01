@@ -4,8 +4,8 @@ import {EditorState, Transaction} from "prosemirror-state"
 import {EditorView} from "prosemirror-view"
 import {schema} from './schema'
 import {plugins} from './plugins'
-import styled from 'styled-components'
 import {normalize, validateState} from './tagger'
+import {StyledEditor} from './style'
 
 interface TextEditorProps {
 	editorStateJSON: any
@@ -68,9 +68,3 @@ export class TextEditor extends React.Component<TextEditorProps> {
 		}
 	}
 }
-
-const StyledEditor = styled.div`
-.tagged {
-	border: 1px solid gray;
-}
-`
