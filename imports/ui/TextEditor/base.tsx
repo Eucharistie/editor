@@ -32,7 +32,7 @@ export class ProseBase<T> extends React.Component<T & ProseBaseProps> {
         if (this.props.editorStateJSON) {
             const newState = this.parseJSON()
             if (this.prose) {
-                if (this.prose.state.doc.content.findDiffStart(newState.doc.content)) {
+                if (this.prose.state.doc.content.findDiffStart(newState.doc.content) != null) {
                     const scrollTop = this.editorDomNode.current!.scrollTop
                     this.prose.updateState(newState)
                     this.editorDomNode.current!.scrollTop = scrollTop
