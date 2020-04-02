@@ -11,8 +11,7 @@ export const Shape = (props: {fill: string}) => <g>
 
 const Circle = (props: {fill: string}) => <circle fill={props.fill} cx="60" cy="60" r="60"/>
 
-const RoundedRectangle = (props: {fill: string}) => <path fill={props.fill} d="M120,93.08c0,14.8-12.03,26.92-26.72,26.92H26.73C12.03,120,0,107.89,0,93.08V26.92C0,12.11,12.03,0,26.73,0
-h66.55C107.97,0,120,12.11,120,26.92V93.08z"/>
+// const RoundedRectangle = (props: {fill: string}) => <path fill={props.fill} d="M120,93.08c0,14.8-12.03,26.92-26.72,26.92H26.73C12.03,120,0,107.89,0,93.08V26.92C0,12.11,12.03,0,26.73,0h66.55C107.97,0,120,12.11,120,26.92V93.08z"/>
 
 const Container = (props: {children: ReactFragment}) => <svg version="1.1" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 viewBox="0 0 120 120" xmlSpace="preserve">

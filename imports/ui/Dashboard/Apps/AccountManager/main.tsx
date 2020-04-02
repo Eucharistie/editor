@@ -25,3 +25,9 @@ export const AccountsManager = () => <ThemeProvider theme={theme}>
 	</Flex>
 </BaseStyles>
 </ThemeProvider>
+
+declare module '@primer/components' {
+	interface SideNavLinkProps {
+		selected?: boolean
+	}
+}

@@ -22,8 +22,6 @@ import {
 	Link,
 	navigate
 } from "@reach/router";
-import styled from 'styled-components';
-
 
 export const StreamDetails = (props: {stream: Stream}) => {
 	function updateStream(textState: EditorState, lastId: number | null) {
