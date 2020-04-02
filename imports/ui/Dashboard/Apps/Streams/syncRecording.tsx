@@ -103,9 +103,19 @@ const TextContainer = styled.div`
 			transition-property: top, bottom;
 			transition-duration: 200ms;
 
-			@media ${centerOverlay} and ${videoHigherThanSceen} {
-				left: calc(${adaptedWidth}vh + ${textMargin}em);
-				right: auto;
+			${PlayerContainer}:hover & {
+				top: calc(${textMargin}em + 60px);
+				bottom: calc(${textMargin}em + 40px);
+			}
+
+			@media ${centerOverlay} {
+				top: ${textMargin}em !important;
+				bottom: ${textMargin}em !important;
+
+				@media only screen and ${videoHigherThanSceen} {
+					left: calc(${adaptedWidth}vh + ${textMargin}em);
+					right: auto;
+				}
 			}
 		};
 	};

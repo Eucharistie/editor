@@ -1,7 +1,7 @@
 import React from 'react'
 // Prose mirror
 import {EditorState} from "prosemirror-state"
-import {EditorView, EditorProps, DirectEditorProps} from "prosemirror-view"
+import {EditorView, DirectEditorProps} from "prosemirror-view"
 import {schema} from './schema'
 import {plugins as basePlugins} from './plugins'
 import {validateState} from './tagger'
@@ -30,7 +30,14 @@ export class ProseBase<T> extends React.Component<T & ProseBaseProps> {
 
     componentDidUpdate() {
         if (this.props.editorStateJSON) {
-            this.prose?.updateState(this.parseJSON())
+            const newState = this.parseJSON()
+            if (this.prose) {
+                if (this.prose.state.doc.content.findDiffStart(newState.doc.content)) {
+                    const scrollTop = this.editorDomNode.current!.scrollTop
+                    this.prose.updateState(newState)
+                    this.editorDomNode.current!.scrollTop = scrollTop
+                }
+            }
         }
     }
 
