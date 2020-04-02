@@ -59,7 +59,7 @@ export function normalize(transaction: Transaction, countFrom: number) {
 	return {transaction: newTransaction, lastId: maxId}
 }
 
-function hasLineTag(textNode: ProseNode<typeof schema>) {
+export function hasLineTag(textNode: ProseNode<typeof schema>) {
 	return schema.marks.taggedLine.isInSet(textNode.marks)
 }
 

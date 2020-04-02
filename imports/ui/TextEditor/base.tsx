@@ -3,8 +3,10 @@ import React from 'react'
 import {EditorState} from "prosemirror-state"
 import {EditorView, EditorProps, DirectEditorProps} from "prosemirror-view"
 import {schema} from './schema'
-import {plugins} from './plugins'
+import {plugins as basePlugins} from './plugins'
 import {validateState} from './tagger'
+import styled from 'styled-components'
+import {Plugin} from "prosemirror-state"
 
 interface ProseBaseProps {
     editorStateJSON: any
@@ -19,7 +21,11 @@ export class ProseBase<T> extends React.Component<T & ProseBaseProps> {
     prose?: EditorView
 
     render() {
-        return <div className={this.props.className} ref={this.editorDomNode}>This is a text editor</div>
+        return <Base className={this.props.className} ref={this.editorDomNode}>This is a text editor</Base>
+    }
+
+    plugins(): Plugin[] {
+        return basePlugins
     }
 
     componentDidUpdate() {
@@ -29,7 +35,10 @@ export class ProseBase<T> extends React.Component<T & ProseBaseProps> {
     }
 
     parseJSON() {
-        const state = EditorState.fromJSON({schema, plugins}, this.props.editorStateJSON)
+        const state = EditorState.fromJSON(
+            {schema, plugins: this.plugins()},
+            this.props.editorStateJSON
+        )
         setTimeout(()=> validateState(state), 200)
         return state
     }
@@ -46,3 +55,12 @@ export class ProseBase<T> extends React.Component<T & ProseBaseProps> {
         }
     }
 }
+
+const Base = styled.div`
+min-height: 5em;
+
+@font-face {
+    font-family: "Liturgy";
+    src: url("/liturgy.woff2") format("woff2");
+}
+`

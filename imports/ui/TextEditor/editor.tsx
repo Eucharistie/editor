@@ -1,10 +1,11 @@
 // Prose mirror
 import {EditorState} from "prosemirror-state"
-import {DirectEditorProps} from "prosemirror-view"
+import {DirectEditorProps, DecorationSet, Decoration} from "prosemirror-view"
 
 import {normalize} from './tagger'
 import { ProseBase } from './base'
 import styled from 'styled-components'
+import {Plugin} from "prosemirror-state"
 
 interface TextEditorProps {
 	onStateChange: (state: EditorState, lastId: number | null) => void
@@ -12,6 +13,10 @@ interface TextEditorProps {
 }
 
 class UnstyledTextEditor extends ProseBase<TextEditorProps> {
+	plugins() {
+		return [...super.plugins(), placeholderPlugin("Voeg tekst toe")]
+	}
+
 	getConfiguration(): DirectEditorProps {
 		const editor = this
 		return {
@@ -33,19 +38,16 @@ class UnstyledTextEditor extends ProseBase<TextEditorProps> {
 }
 
 export const TextEditor = styled(UnstyledTextEditor)`
-margin-top: 8px;
-min-height: 5em;
-
-@font-face {
-    font-family: "Liturgy";
-    src: url("/liturgy.woff2") format("woff2");
-}
-
-.tagged:hover {
-	background: #eee4c3
-}
-
-.tagged {
-	//display: inline-block
-}
 `
+
+function placeholderPlugin(placeholder: string) {
+	return new Plugin({
+		props: {
+			decorations(state) {
+				let doc = state.doc
+				if (doc.childCount == 1 && doc.firstChild?.isTextblock && doc.firstChild.content.size == 0)
+				return DecorationSet.create(doc, [Decoration.widget(1, document.createTextNode(placeholder))])
+			}
+		}
+	})
+}

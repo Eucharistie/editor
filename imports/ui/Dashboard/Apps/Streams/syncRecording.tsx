@@ -4,13 +4,17 @@ import {paddedContainer} from "/imports/ui/style";
 import {Box} from "@primer/components";
 import YouTube from "@u-wave/react-youtube";
 import {useState} from "react";
-import { TextLinker } from '/imports/ui/TextEditor/viewer';
+import { TextLinker } from '../../../TextEditor/linker';
 
 export const SyncRecording = (props: {stream: Stream}) => {
     const [player, setPlayer] = useState(null as null|YT.Player)
 
     function initPlayer(event: YT.PlayerEvent) {
         setPlayer(event.target)
+    }
+
+    function linkTag(id: number) {
+        console.log('link', id)
     }
 
     return <Box {...paddedContainer} marginTop={2}>
@@ -21,7 +25,7 @@ export const SyncRecording = (props: {stream: Stream}) => {
         />
         <TextLinker
             editorStateJSON={props.stream.text}
-            onLinkTag={(_)=>{ }}
+            onLinkTag={linkTag}
         />
     </Box>
 }
