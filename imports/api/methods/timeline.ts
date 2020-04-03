@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { CuePoint, CueType, CueTimeline } from '../collections/Timeline'
+import { CuePoint, CueTimeline } from '../collections/Timeline'
 import { check } from 'meteor/check'
 import { StreamsCollection } from '../collections/Streams'
 
@@ -48,5 +48,3 @@ export function addCue(cue: CuePoint) {
 export function removeCue(uid: string) {
 	Meteor.call(removeCueMethodName, uid)
 }
-
-console.log(CueType)

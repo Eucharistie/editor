@@ -11,6 +11,7 @@ export interface Stream {
 }
 
 export const StreamsCollection = new Mongo.Collection<Stream>('streams');
+export const streamWithCuesPublication = 'Stream with Cues'
 
 const textUpdateFields = new Set(['text', 'tagFrom'])
 

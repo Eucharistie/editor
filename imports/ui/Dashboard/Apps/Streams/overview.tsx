@@ -8,7 +8,10 @@ import { Plus } from '@primer/octicons-react'
 import { paddedContainer} from '/imports/ui/style'
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
-import { StreamsCollection, Stream } from '/imports/api/collections/Streams';
+import {
+	StreamsCollection,
+	Stream
+} from '/imports/api/collections/Streams';
 import { createStream } from '/imports/api/methods/streams';
 import TimeAgo from 'timeago-react'
 import {

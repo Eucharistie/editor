@@ -8,12 +8,14 @@ import { StreamOverview } from './overview'
 import { StreamDetails } from './editor'
 import {
 	Stream,
-	StreamsCollection
+	StreamsCollection,
+	streamWithCuesPublication
 } from '/imports/api/collections/Streams';
 import {useTracker} from "meteor/react-meteor-data";
 import {SyncLive} from "/imports/ui/Dashboard/Apps/Streams/syncLive";
 import {SyncRecording} from "/imports/ui/Dashboard/Apps/Streams/syncRecording";
 import { Viewer } from './viewer';
+import {Meteor} from "meteor/meteor";
 
 const RenderOverview = (_: RouteComponentProps) => <StreamOverview />
 
@@ -26,6 +28,7 @@ export function StreamsRouter() {
 
 function StreamRouter(route: RouteComponentProps & {streamID?: string}) {
 	const stream = useTracker(() => {
+		Meteor.subscribe(streamWithCuesPublication, route.streamID)
 		return StreamsCollection.findOne(route.streamID)
 	}, [])
 
