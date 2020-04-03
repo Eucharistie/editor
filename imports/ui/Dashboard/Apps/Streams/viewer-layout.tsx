@@ -1,6 +1,10 @@
-import styled, { AnyStyledComponent } from 'styled-components'
+import styled, {
+	AnyStyledComponent,
+	createGlobalStyle
+} from 'styled-components'
 import {Box} from '@primer/components'
 import YouTube from '@u-wave/react-youtube'
+import {CuePoint} from "/imports/api/collections/Timeline";
 
 const videoAspect = 16/9
 const fullWidth = 100
@@ -122,3 +126,15 @@ export const FadedBackground = styled.div`
 		};
 	};
 `
+
+export const HighlightCues = createGlobalStyle` ${(props: {timeline: CuePoint[]}) => {if (props.timeline.length) {
+	return `
+		${props.timeline.map(createTagClassName).join(',')} {
+			background: rgb(199, 223, 241) !important;
+		}
+	`
+}}}`
+
+function createTagClassName(cue: CuePoint) {
+	return `.tag-${cue.id}`
+}

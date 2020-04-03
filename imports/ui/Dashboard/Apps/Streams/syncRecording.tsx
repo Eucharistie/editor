@@ -1,12 +1,18 @@
 import   React from 'react'
 import { Stream } from "imports/api/collections/Streams";
 import { useState } from "react";
-import { createGlobalStyle }   from 'styled-components';
 import { addCue, removeCue } from '/imports/api/methods/timeline'
-import { CueType, CueTimeline, CuePoint } from '/imports/api/collections/Timeline'
+import { CueType, CueTimeline } from '/imports/api/collections/Timeline'
 import { Meteor } from 'meteor/meteor';
 import { useTracker } from 'meteor/react-meteor-data'
-import { Player, PlayerContainer, TextContainer, FadedBackground, layoutTextView } from './viewer-layout'
+import {
+	Player,
+	PlayerContainer,
+	TextContainer,
+	FadedBackground,
+	layoutTextView,
+	HighlightCues
+} from './viewer-layout'
 import { TextLinker } from '/imports/ui/TextEditor/linker'
 
 export const SyncRecording = (props: {stream: Stream}) => {
@@ -53,19 +59,6 @@ export const SyncRecording = (props: {stream: Stream}) => {
 		</TextContainer>
 		<HighlightCues timeline={timeline}/>
 	</PlayerContainer>
-}
-
-
-const HighlightCues = createGlobalStyle` ${(props: {timeline: CuePoint[]}) => {if (props.timeline.length) {
-	return `
-		${props.timeline.map(createTagClassName).join(',')} {
-			background: rgb(199, 223, 241) !important;
-		}
-	`
-}}}`
-
-function createTagClassName(cue: CuePoint) {
-	return `.tag-${cue.id}`
 }
 
 const StyledTextLinker = layoutTextView(TextLinker)

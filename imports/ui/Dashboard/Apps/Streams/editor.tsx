@@ -1,27 +1,19 @@
 import React, {useState} from 'react';
 import {Stream, StreamsCollection} from '/imports/api/collections/Streams'
-import {
-	BaseStyles,
-	Box,
-	Button,
-	ButtonDanger,
-	Dialog,
-	Flex,
-	TextInput,
-} from '@primer/components'
+import {BaseStyles, Box, Button, ButtonDanger, Dialog, Flex, TextInput} from '@primer/components'
 import moment from 'moment'
 import { paddedContainer } from '/imports/ui/style';
 import { TextEditor } from '/imports/ui/TextEditor/editor'
 import { EditorState } from 'prosemirror-state';
 import YouTube from '@u-wave/react-youtube'
 import {faYoutube} from '@fortawesome/free-brands-svg-icons'
-import {faWifi, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {faWifi, faTrash, faFileSignature } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {} from 'styled-components/cssprop'
-import {
-	Link,
-	navigate
-} from "@reach/router";
+import {Link, navigate} from "@reach/router";
+import {HighlightCues} from "/imports/ui/Dashboard/Apps/Streams/viewer-layout";
+import {useTracker} from "meteor/react-meteor-data";
+import {CueTimeline} from "/imports/api/collections/Timeline";
 
 export const StreamDetails = (props: {stream: Stream}) => {
 	function updateStream(textState: EditorState, lastId: number | null) {
@@ -32,6 +24,9 @@ export const StreamDetails = (props: {stream: Stream}) => {
 	}
 
 	const [player, setPlayer] = useState(null as YT.Player|null);
+	const timeline = useTracker(function() {
+		return CueTimeline.find({stream: props.stream._id}).fetch()
+	})
 
 	function changeId(event: React.ChangeEvent<HTMLInputElement>) {
 		StreamsCollection.update(props.stream._id!, {$set: {videoId: event.target.value}})
@@ -87,8 +82,11 @@ export const StreamDetails = (props: {stream: Stream}) => {
 				/>
 			</Box>
 			<Flex>
+				<Link to={"viewer"}>
+					<Button><PaddedIcon icon={faYoutube} size={"lg"}/> Preview</Button>
+				</Link>
 				<Link to={"recording"}>
-					<Button><PaddedIcon icon={faYoutube} size={"lg"}/> Sync Recording</Button>
+					<Button><PaddedIcon icon={faFileSignature} size={"lg"}/> Sync Recording</Button>
 				</Link>
 				<Link to={"live"}>
 					<Button><PaddedIcon icon={faWifi}/> Sync Live</Button>
@@ -100,6 +98,7 @@ export const StreamDetails = (props: {stream: Stream}) => {
 					editorStateJSON={props.stream.text}
 					counter={props.stream.tagFrom ?? 0}
 				/>
+				<HighlightCues timeline={timeline}/>
 			</Box>
 
 
