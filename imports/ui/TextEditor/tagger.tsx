@@ -69,18 +69,14 @@ function allMarksExceptTag(node: ProseNode) {
 
 export function validateState(state: EditorState) {
 	const ids = new Set<number>()
-	let valid = true
 	state.doc.descendants(function(node) {
 		const tag = hasLineTag(node)
 		if (tag) {
 			if (ids.has(tag.attrs.id)) {
 				console.log('Found duplicate tag', tag.attrs.id)
-				valid = false
+				return false
 			}
 			ids.add(tag.attrs.id)
 		}
 	})
-	if (valid) {
-		console.log('Validated tagged text')
-	}
 }

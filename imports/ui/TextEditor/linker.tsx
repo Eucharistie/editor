@@ -3,13 +3,14 @@ import {DirectEditorProps, EditorView} from "prosemirror-view"
 import { ProseBase } from './base'
 import {hasLineTag} from './tagger'
 import styled from 'styled-components'
+import { CuePoint } from '/imports/api/collections/Timeline'
 
 interface TextViewerProps {
-	onLinkTag(id: number): void
+	onLinkTag(id: number): void,
+	timeline: CuePoint[]
 }
 
 class UnstyledTextLinker extends ProseBase<TextViewerProps> {
-
 	link(view: EditorView, pos: number, event: MouseEvent) {
 		const node = view.state.doc.nodeAt(pos)
 		if (node) {
@@ -35,6 +36,8 @@ class UnstyledTextLinker extends ProseBase<TextViewerProps> {
 }
 
 export const TextLinker = styled(UnstyledTextLinker)`
+user-select: none;
+
 .tagged:hover {
 	background: #eee4c3;
 	padding: 0.25em 0;

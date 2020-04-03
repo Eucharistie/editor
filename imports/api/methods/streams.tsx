@@ -22,5 +22,5 @@ Meteor.methods({
 })
 
 export function createStream() {
-	Meteor.call('createStream')
+	Meteor.call(createStreamMethodName)
 }
