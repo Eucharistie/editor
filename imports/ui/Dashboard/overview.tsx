@@ -48,7 +48,7 @@ const apps: DashboardAppInfo[] = [
 export const Dashboard = () => (
 	<ThemeProvider theme={theme}>
 		<BaseStyles>
-			<TopNavigationBar />
+			<TopNavigationBar/>
 
 			<Router>
 				<Overview path="/"/>

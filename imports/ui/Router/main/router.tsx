@@ -4,6 +4,7 @@ import React from 'react';
 import { Dashboard } from '../../Dashboard/overview'
 import { LoginPage } from '../../Login/page'
 import { useAccount } from '/imports/api/accounts'
+import { Settings } from "/imports/ui/Settings/main";
 
 export const mainRoutes = {
 	dashboard: {
@@ -16,6 +17,13 @@ export const mainRoutes = {
 		component: (props: RouteComponentProps) => {
 			const state = props.location?.state as {loginError?: Error} | null
 			return <LoginPage loginError={state?.loginError}/>
+		},
+		default: false
+	},
+	settings: {
+		path: '/settings/*',
+		component(_: RouteComponentProps) {
+			return <Settings />
 		},
 		default: false
 	}
