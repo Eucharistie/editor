@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { LinksCollection } from '../imports/api/collections/links';
+import { LinksCollection } from '/imports/api/collections/links';
 
 import '/imports/api/methods/index'
 

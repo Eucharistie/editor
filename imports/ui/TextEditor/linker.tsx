@@ -5,12 +5,12 @@ import {hasLineTag} from './tagger'
 import styled from 'styled-components'
 import { CuePoint } from '/imports/api/collections/Timeline'
 
-interface TextViewerProps {
+interface TextLinkerProps {
 	onLinkTag(id: number): void,
 	timeline: CuePoint[]
 }
 
-class UnstyledTextLinker extends ProseBase<TextViewerProps> {
+class UnstyledTextLinker extends ProseBase<TextLinkerProps> {
 	link(view: EditorView, pos: number, event: MouseEvent) {
 		const node = view.state.doc.nodeAt(pos)
 		if (node) {
@@ -36,14 +36,14 @@ class UnstyledTextLinker extends ProseBase<TextViewerProps> {
 }
 
 export const TextLinker = styled(UnstyledTextLinker)`
-user-select: none;
+	user-select: none;
 
-.tagged:hover {
-	background: #eee4c3;
-	padding: 0.25em 0;
-}
+	.tagged:hover {
+		background: #eee4c3;
+		padding: 0.25em 0;
+	}
 
-.tagged {
-	cursor: pointer;
-}
+	.tagged {
+		cursor: pointer;
+	}
 `

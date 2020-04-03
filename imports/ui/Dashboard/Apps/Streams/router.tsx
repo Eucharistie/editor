@@ -13,6 +13,7 @@ import {
 import {useTracker} from "meteor/react-meteor-data";
 import {SyncLive} from "/imports/ui/Dashboard/Apps/Streams/syncLive";
 import {SyncRecording} from "/imports/ui/Dashboard/Apps/Streams/syncRecording";
+import { Viewer } from './viewer';
 
 const RenderOverview = (_: RouteComponentProps) => <StreamOverview />
 
@@ -34,12 +35,14 @@ function StreamRouter(route: RouteComponentProps & {streamID?: string}) {
 		<RenderDetails stream={stream} path='/' />
 		<RenderSyncLive stream={stream} path='live' />
 		<RenderSyncRecording stream={stream} path='recording' />
+		<RenderViewer stream={stream} path='viewer' />
 	</Router>
 }
 
 const RenderDetails = (props: StreamRoute) => <StreamDetails stream={props.stream} />
 const RenderSyncLive = (props: StreamRoute) => <SyncLive stream={props.stream} />
 const RenderSyncRecording = (props: StreamRoute) => <SyncRecording stream={props.stream} />
+const RenderViewer = (props: StreamRoute) => <Viewer stream={props.stream}/>
 
 interface StreamRoute extends RouteComponentProps{
 	stream: Stream

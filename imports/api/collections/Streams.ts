@@ -29,7 +29,7 @@ StreamsCollection.allow({
 	},
 
 	remove(userId: string, doc: Stream) {
-		if (doc.editorIds.includes(userId)) return true
-		return false
+		return doc.editorIds.includes(userId);
+
 	}
 })

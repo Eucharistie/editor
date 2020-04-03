@@ -66,6 +66,10 @@ export class ProseBase<T> extends React.Component<T & ProseBaseProps> {
 const Base = styled.div`
 min-height: 5em;
 
+& > *:first-child {
+    margin-top: 0;
+}
+
 @font-face {
     font-family: "Liturgy";
     src: url("/liturgy.woff2") format("woff2");
