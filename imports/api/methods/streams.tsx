@@ -21,6 +21,6 @@ Meteor.methods({
 	}
 })
 
-export function createStream() {
-	Meteor.call(createStreamMethodName)
+export function createStream(callback: (error: Error, id: string) => void) {
+	Meteor.call(createStreamMethodName, callback)
 }

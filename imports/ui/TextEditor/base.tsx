@@ -42,10 +42,11 @@ export class ProseBase<T> extends React.Component<T & ProseBaseProps> {
     }
 
     parseJSON() {
-        const state = EditorState.fromJSON(
-            {schema, plugins: this.plugins()},
+        const config = {schema, plugins: this.plugins()}
+        const state = this.props.editorStateJSON ? EditorState.fromJSON(
+            config,
             this.props.editorStateJSON
-        )
+        ) : EditorState.create(config)
         setTimeout(()=> validateState(state), 200)
         return state
     }

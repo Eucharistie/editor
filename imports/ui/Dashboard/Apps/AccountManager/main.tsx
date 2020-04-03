@@ -1,6 +1,6 @@
 import React from 'react';
-import { Hello } from '/imports/ui/Hello';
-import { Info } from '/imports/ui/Info';
+import { Hello } from './Hello';
+import { Info } from './Info';
 import { ThemeProvider } from 'styled-components'
 import { BaseStyles, Flex, Box, BorderBox, theme, SideNav, Heading } from '@primer/components'
 

@@ -1,21 +1,21 @@
 import React from 'react'
 import { CircularLogo } from '/imports/Logo/logo';
 import { Gear } from '@primer/octicons-react'
-import { Flex, Box, Text, Link, StyledOcticon} from '@primer/components'
+import { Flex, Box, StyledOcticon, Link as PrimerLink} from '@primer/components'
 import { paddedContainer, blue } from '/imports/ui/style'
-
-import {Toggle} from './Dashboard/Navigation/toggle'
+import { Link } from './link'
+import { Toggle } from './toggle'
 
 export const TopNavigationBar = () => <Box backgroundColor={blue} color='white' paddingY={3}>
 	<Box {...paddedContainer}>
 		<Flex justifyContent='space-between' alignItems='center'>
 			<Box>
-				<Link href="https://eucharistie.info">
+				<PrimerLink href="https://eucharistie.info">
 					<CircularLogo size={40} bg='white' fg={blue} display='inline-block' verticalAlign='middle' marginX={4} />
-				</Link>
+				</PrimerLink>
 				
 				<Box display='inline' verticalAlign='middle'>
-					<Text fontSize={23}>Editor</Text>
+					<Link to="/dashboard" fontSize={23} color="white">Editor</Link>
 				</Box>
 			</Box>
 
