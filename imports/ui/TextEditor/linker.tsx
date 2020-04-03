@@ -39,8 +39,9 @@ export const TextLinker = styled(UnstyledTextLinker)`
 	user-select: none;
 
 	.tagged:hover {
-		background: #eee4c3;
-		padding: 0.25em 0;
+		background: rgb(199, 223, 241);
+		padding: 5px 0;
+		border-radius: 5px;
 	}
 
 	.tagged {

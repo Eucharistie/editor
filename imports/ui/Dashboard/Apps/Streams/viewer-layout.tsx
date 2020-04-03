@@ -130,7 +130,9 @@ export const FadedBackground = styled.div`
 export const HighlightCues = createGlobalStyle` ${(props: {timeline: CuePoint[]}) => {if (props.timeline.length) {
 	return `
 		${props.timeline.map(createTagClassName).join(',')} {
-			background: rgb(199, 223, 241) !important;
+			background: rgb(191, 240, 199) !important;
+			border-radius: 5px;
+			padding: 5px 0;
 		}
 	`
 }}}`
