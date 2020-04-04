@@ -1,4 +1,4 @@
-import { Router, navigate, RouteComponentProps } from '@reach/router';
+import { Router, navigate, RouteComponentProps, useMatch, Redirect } from '@reach/router';
 
 import React from 'react';
 import { Dashboard } from '../../Dashboard/overview'
@@ -29,20 +29,21 @@ export const mainRoutes = {
 	}
 }
 
-export const WebsiteRouter = () => {
+const Guard = (props: RouteComponentProps & {component: (props: RouteComponentProps) => JSX.Element}) => {
 	const {isLoggedIn} = useAccount()
+	const onViewerPage = useMatch('/dashboard/streams/:id/viewer')
 
-	if (!isLoggedIn) {
-		navigate("/")
+	if (!isLoggedIn && !onViewerPage) {
+		navigate('/')
 	}
 
-	return (
-		<Router>
-			{
-				Object.entries(mainRoutes).map(([name, info]) =>
-					<info.component path={info.path} key={name} default={info.default} />
-				)
-			}
-		</Router>
-	)
-};
+	return <props.component {...props}/>
+}
+
+export const WebsiteRouter = () => <Router>
+	{
+		Object.entries(mainRoutes).map(([name, info]) =>
+			<Guard component={info.component} path={info.path} key={name} default={info.default} />
+		)
+	}
+</Router>
