@@ -3,7 +3,7 @@ import styled, {
 	createGlobalStyle
 } from 'styled-components'
 import {Box} from '@primer/components'
-import YouTube from '@u-wave/react-youtube'
+import ReactPlayer from 'react-player'
 import {CuePoint} from "/imports/api/collections/Timeline";
 
 const videoAspect = 16/9
@@ -29,18 +29,18 @@ export const PlayerContainer = styled(Box)`
 	};
 `
 
-export const Player = styled(YouTube)`
-	width: ${fullWidth}vw;
-	height: ${adaptHeight(fullWidth)}vw;
-	max-height: 100vh;
+export const Player = styled(ReactPlayer)`
+	width: ${fullWidth}vw !important;
+	height: ${adaptHeight(fullWidth)}vw !important;
+	max-height: 100vh !important;
 
 	@media ${notEnoughHeightForTextUnderVideo} {
 		@media ${prefersTwoColumns} {
-			width: ${halfWidth}vw;
-			height: ${adaptHeight(halfWidth)}vw;
+			width: ${halfWidth}vw !important;
+			height: ${adaptHeight(halfWidth)}vw !important;
 		};
 		@media ${prefersOverlay} and ${videoHigherThanSceen} {
-			width: ${100*videoAspect}vh;
+			width: ${100*videoAspect}vh !important;
 		};
 	};
 `

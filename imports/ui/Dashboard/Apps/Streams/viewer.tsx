@@ -3,41 +3,32 @@ import { Stream } from '/imports/api/collections/Streams'
 import { Player, PlayerContainer, TextContainer, FadedBackground, layoutTextView } from './viewer-layout'
 import { TextViewer } from '/imports/ui/TextEditor/viewer'
 import { useTracker } from "meteor/react-meteor-data";
-import { CueTimeline } from '/imports/api/collections/Timeline'
+import { CueTimeline, CuePoint } from '/imports/api/collections/Timeline'
 // @ts-ignore
 import smoothscroll from 'smoothscroll-polyfill';
+import ReactPlayer from 'react-player'
 
 smoothscroll.polyfill();
 
-const isPlaying = 1
-
 export const Viewer = (props: {stream: Stream}) => {
-	const textView = useRef<TextViewer>()
 	const timeline = useTracker(() => {
 		return CueTimeline.find({stream: props.stream._id}, {sort: {time: 1}}).fetch()
 	})
-	const [player, setPlayer] = useState(null as YT.Player|null)
+
+	return <Viewer2 stream={props.stream} timeline={timeline} />
+}
+
+const Viewer2 = (props: {stream: Stream, timeline: CuePoint[]}) => {
+	const textView = useRef<TextViewer>()
 	const [currentCue, setCurrentCue] = useState(0)
-	let intervalHandle = null as number|null
+	const [currentTime, setCurrentTime] = useState(0)
 
-	function updateTracking(event: YT.OnStateChangeEvent) {
-		if (intervalHandle) clearInterval(intervalHandle)
-		if (event.data == isPlaying) {
-			intervalHandle = window.setInterval(trackVideo, 200)
-		}
-	}
-
-	function trackVideo() {
-		console.log('tick')
-		if (player === null || timeline.length == 0) return
-		const time = player.getCurrentTime()
-		const cueIndex = findCueIndex(time)
-		if (cueIndex == currentCue) return
+	const cueIndex = findCueIndex(currentTime)
+	if (cueIndex != currentCue) {
 		setCurrentCue(cueIndex)
-		const cue = timeline[cueIndex]
+		const cue = props.timeline[cueIndex]
 		const text = document.querySelector(`.tagged.tag-${cue.id}`)
 		const scrollView = textView.current?.editorDomNode.current
-		console.log(text, textView)
 		if (text && scrollView) {
 			scrollView.scrollTo({
 				left: 0,
@@ -48,29 +39,16 @@ export const Viewer = (props: {stream: Stream}) => {
 	}
 
 	function findCueIndex(time: number) {
-		const index = binarySearch(timeline.length, (index: number) => time < timeline[index].time) - 1
-		return Math.max(Math.min(index, timeline.length - 1), 0)
+		const index = binarySearch(props.timeline.length, (index: number) => time < props.timeline[index].time) - 1
+		return Math.max(Math.min(index, props.timeline.length - 1), 0)
 	}
-
-	useEffect(() => {
-		// Resume tracking after component update
-		const playerState = player?.getPlayerState()
-		if (playerState === isPlaying) {
-			updateTracking({target: player!, data: playerState!})
-		}
-
-		// Clean up video tracking
-		return function() {
-			if (intervalHandle) clearInterval(intervalHandle)
-		}
-	})
 
 	return <PlayerContainer marginTop={2}>
 		<Player
-			video={props.stream.videoId}
+			url={props.stream.videoId}
 			playsInline={true}
-			onStateChange={updateTracking}
-			onReady={event => setPlayer(event.target)}
+			onProgress={(e: {playedSeconds: number}) => setCurrentTime(e.playedSeconds)}
+			controls
 		/>
 		<TextContainer>
 			<FadedBackground />
@@ -139,4 +117,11 @@ function measureNonSticking(node: Element, textContainer: Element) {
 	// Enable stickyness again
 	node.classList.remove('js-measurement')
 	return offset
+}
+
+
+interface VideoPlayer extends ReactPlayer {
+	player: {
+		isPlaying: boolean
+	}
 }

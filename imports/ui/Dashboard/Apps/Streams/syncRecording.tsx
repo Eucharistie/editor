@@ -1,6 +1,6 @@
 import   React from 'react'
 import { Stream } from "imports/api/collections/Streams";
-import { useState } from "react";
+import { useRef } from "react";
 import { addCue, removeCue } from '/imports/api/methods/timeline'
 import { CueType, CueTimeline } from '/imports/api/collections/Timeline'
 import { Meteor } from 'meteor/meteor';
@@ -14,20 +14,16 @@ import {
 	HighlightCues
 } from './viewer-layout'
 import { TextLinker } from '/imports/ui/TextEditor/linker'
+import ReactPlayer from 'react-player'
 
 export const SyncRecording = (props: {stream: Stream}) => {
-	const [player, setPlayer] = useState(null as null|YT.Player)
-
+	const player = useRef<ReactPlayer>()
 	const timeline = useTracker(function() {
 		return CueTimeline.find({stream: props.stream._id}).fetch()
 	})
 
-	function initPlayer(event: YT.PlayerEvent) {
-		setPlayer(event.target)
-	}
-
 	function linkTag(id: number) {
-		const time = player?.getCurrentTime()
+		const time = player.current?.getCurrentTime()
 		if (time === undefined) throw new Meteor.Error('Cannot link text to video', 'video time not available')
 		if (props.stream._id == undefined) throw new Meteor.Error('Cannot link text to video', 'Stream id is not available')
 		const existingCue = CueTimeline.findOne({stream: props.stream._id, id})
@@ -45,9 +41,10 @@ export const SyncRecording = (props: {stream: Stream}) => {
 
 	return <PlayerContainer marginTop={2}>
 		<Player
-			video={props.stream.videoId}
+			url={props.stream.videoId}
 			playsInline={true}
-			onReady={initPlayer}
+			controls
+			ref={player}
 		/>
 		<TextContainer>
 			<FadedBackground />

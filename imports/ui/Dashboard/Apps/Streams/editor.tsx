@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {Stream, StreamsCollection} from '/imports/api/collections/Streams'
 import {BaseStyles, Box, Button, ButtonDanger, Dialog, Flex, TextInput} from '@primer/components'
 import moment from 'moment'
 import { paddedContainer } from '/imports/ui/style';
 import { TextEditor } from '/imports/ui/TextEditor/editor'
 import { EditorState } from 'prosemirror-state';
-import YouTube from '@u-wave/react-youtube'
+import ReactPlayer from 'react-player'
 import {faYoutube} from '@fortawesome/free-brands-svg-icons'
 import {faWifi, faTrash, faFileSignature } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -23,7 +23,7 @@ export const StreamDetails = (props: {stream: Stream}) => {
 		}})
 	}
 
-	const [player, setPlayer] = useState(null as YT.Player|null);
+	const player = useRef<ReactPlayer>()
 	const timeline = useTracker(function() {
 		return CueTimeline.find({stream: props.stream._id}).fetch()
 	})
@@ -31,25 +31,23 @@ export const StreamDetails = (props: {stream: Stream}) => {
 	function changeId(event: React.ChangeEvent<HTMLInputElement>) {
 		StreamsCollection.update(props.stream._id!, {$set: {videoId: event.target.value}})
 		setTimeout(() => {
-			player?.seekTo(0, true)
-			player?.pauseVideo()
+			player.current?.seekTo(0)
 		}, 100)
-	}
-
-	function initPlayer(event: YT.PlayerEvent) {
-		setPlayer(event.target)
 	}
 
 	function logError(error: any) {
 		console.log('error', error)
 	}
 
-	function stateChanged(state: YT.PlayerEvent) {
-		const player = state.target as YT.Player & {getVideoData(): VideoData}
-		const data = player.getVideoData()
-		if (data && data.title.length > 0) {
-			StreamsCollection.update(props.stream._id!, {$set: {title: data.title}})
-		}
+	function getTitle() {
+		try {
+			// If it is a youtube video get its title
+			// @ts-ignore
+			const data = player.current?.getInternalPlayer().getVideoData() as VideoData
+			if (data && data.title.length > 0) {
+				StreamsCollection.update(props.stream._id!, {$set: {title: data.title}})
+			}
+		} catch (error) {}
 	}
 
 	let [removeDialogIsOpen, openRemoveDialog] = useState(false)
@@ -73,12 +71,13 @@ export const StreamDetails = (props: {stream: Stream}) => {
 			</p>
 			<p>Created at: {moment(props.stream.createdAt).format()}</p>
 			<Box marginY={2}>
-				<YouTube
-					video={props.stream.videoId}
+				<ReactPlayer
+					url={props.stream.videoId}
 					playsInline={true}
-					onReady={initPlayer}
 					onError={logError}
-					onStateChange={stateChanged}
+					controls
+					onBuffer={getTitle}
+					ref={player}
 				/>
 			</Box>
 			<Flex>
