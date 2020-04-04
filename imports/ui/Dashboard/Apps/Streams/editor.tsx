@@ -19,7 +19,7 @@ export const StreamDetails = (props: {stream: Stream}) => {
 	function updateStream(textState: EditorState, lastId: number | null) {
 		StreamsCollection.update(props.stream._id!, {$set: {
 			text: textState.toJSON(),
-			tagFrom: lastId ?? 0
+			tagFrom: Math.max(props.stream.tagFrom ?? 0, lastId ?? 0)
 		}})
 	}
 
