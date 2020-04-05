@@ -64,7 +64,7 @@ export const StreamDetails = (props: {stream: Stream}) => {
 	return (
 		<Box {...paddedContainer} marginTop={2}>
 			<p>
-				Video ID: <TextInput value={props.stream.videoId ?? ''} onChange={changeId}/>
+				Video URL: <TextInput value={props.stream.videoId ?? ''} onChange={changeId}/>
 				<ButtonDanger onClick={_ => openRemoveDialog(true)}>
 					<PaddedIcon icon={faTrash}/> Delete stream
 				</ButtonDanger>
