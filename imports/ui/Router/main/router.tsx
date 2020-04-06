@@ -32,8 +32,9 @@ export const mainRoutes = {
 const Guard = (props: RouteComponentProps & {component: (props: RouteComponentProps) => JSX.Element}) => {
 	const {isLoggedIn} = useAccount()
 	const onViewerPage = useMatch('/dashboard/streams/:id/viewer')
+	const onLoginPage = useMatch('/')
 
-	if (!isLoggedIn && !onViewerPage) {
+	if (!isLoggedIn && !onViewerPage && !onLoginPage) {
 		navigate('/')
 	}
 
