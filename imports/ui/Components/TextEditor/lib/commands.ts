@@ -41,11 +41,11 @@ const findParentNodeClosestToPos = ($pos: ResolvedPos, predicate: (node: ProseNo
 const findParentNode = (predicate: (node: ProseNode) => boolean) => ({ $from }: {$from: ResolvedPos}) =>
   findParentNodeClosestToPos($from, predicate);
 
-const findParentNodeOfType = (nodeType: NodeType) => (selection: Selection) => {
+export const findParentNodeOfType = (nodeType: NodeType|NodeType[]) => (selection: Selection) => {
 	return findParentNode(node => equalNodeType(nodeType, node))(selection);
 };
 
-const equalNodeType = (nodeType: NodeType, node: ProseNode) => {
+const equalNodeType = (nodeType: NodeType|NodeType[], node: ProseNode) => {
 	return (
 		(Array.isArray(nodeType) && nodeType.indexOf(node.type) > -1) ||
 		node.type === nodeType

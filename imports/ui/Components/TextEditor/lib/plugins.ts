@@ -25,6 +25,11 @@ const macCommands = !mac ? {} : {
 	"Ctrl-Enter": insertHardBreak
 }
 
+export const toggleRefrain = toggleNodeAttribute([
+    schema.nodes.verse,
+    schema.nodes.paragraph
+], 'isRefrain')
+
 export const plugins = [
     inputRules({ rules: smartQuotes }),
     keymap({
@@ -41,10 +46,7 @@ export const plugins = [
         "Shift-Enter": insertHardBreak,
         "Ctrl-Alt-n": insertHardBreak,
         ...macCommands,
-        "Ctrl-r": toggleNodeAttribute([
-            schema.nodes.verse,
-            schema.nodes.paragraph
-        ], 'isRefrain')
+        "Ctrl-r": toggleRefrain
     }),
     keymap(baseKeymap),
     dropCursor(),

@@ -6,8 +6,7 @@ import {schema, Refrain} from '../lib/schema'
 import {plugins as basePlugins} from '../lib/plugins'
 import {validateState} from '../lib/tagger'
 import styled from 'styled-components'
-import {Plugin, Selection} from "prosemirror-state"
-import { Node as ProseNode, Mark } from 'prosemirror-model'
+import {Plugin} from "prosemirror-state"
 import {liturgyFont} from '/imports/ui/style'
 
 export interface ProseBaseProps {
