@@ -2,7 +2,7 @@ import React from 'react'
 // Prose mirror
 import {EditorState} from "prosemirror-state"
 import {EditorView, DirectEditorProps} from "prosemirror-view"
-import {schema} from './schema'
+import {schema, Refrain} from './schema'
 import {plugins as basePlugins} from './plugins'
 import {validateState} from './tagger'
 import styled from 'styled-components'
@@ -71,8 +71,8 @@ min-height: 5em;
     margin-top: 0;
 }
 
-@font-face {
-    font-family: "Liturgy";
-    src: url("/liturgy.woff2") format("woff2");
+${Refrain}::before {
+	content: 'R.';
+	font-family: "Liturgy", "Palatino", serif;
 }
 `

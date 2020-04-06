@@ -14,6 +14,7 @@ import {Link, navigate} from "@reach/router";
 import {HighlightCues} from "/imports/ui/Dashboard/Apps/Streams/viewer-layout";
 import {useTracker} from "meteor/react-meteor-data";
 import {CueTimeline} from "/imports/api/collections/Timeline";
+import styled from 'styled-components'
 
 export const StreamDetails = (props: {stream: Stream}) => {
 	function updateStream(textState: EditorState, lastId: number | null) {
@@ -91,14 +92,14 @@ export const StreamDetails = (props: {stream: Stream}) => {
 					<Button><PaddedIcon icon={faWifi}/> Sync Live</Button>
 				</Link>
 			</Flex>
-			<Box marginTop={2}>
+			<MenuBarContainer marginTop={2}>
 				<TextEditor
 					onStateChange={updateStream}
 					editorStateJSON={props.stream.text}
 					counter={props.stream.tagFrom ?? 0}
 				/>
 				<HighlightCues timeline={timeline}/>
-			</Box>
+			</MenuBarContainer>
 
 
 			<Dialog title='Stream verwijderen?' isOpen={removeDialogIsOpen} onDismiss={()=>openRemoveDialog(false)}>
@@ -115,6 +116,13 @@ export const StreamDetails = (props: {stream: Stream}) => {
 		</Box>
 	)
 }
+
+const MenuBarContainer = styled(Box)`
+	.ProseMirror-menubar {
+		position: sticky;
+		top: 0;
+	}
+`
 
 interface VideoData {
 	video_id: string

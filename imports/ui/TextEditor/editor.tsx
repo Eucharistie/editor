@@ -2,10 +2,12 @@
 import {EditorState} from "prosemirror-state"
 import {DirectEditorProps, DecorationSet, Decoration} from "prosemirror-view"
 
-import {normalize} from './tagger'
+import { normalize } from './tagger'
 import { ProseBase } from './base'
 import styled from 'styled-components'
-import {Plugin} from "prosemirror-state"
+import { Plugin } from "prosemirror-state"
+import 'prosemirror-menu/style/menu.css'
+import {menuBar} from './plugins'
 
 interface TextEditorProps {
 	onStateChange: (state: EditorState, lastId: number | null) => void
@@ -14,7 +16,11 @@ interface TextEditorProps {
 
 class UnstyledTextEditor extends ProseBase<TextEditorProps> {
 	plugins() {
-		return [...super.plugins(), placeholderPlugin("Voeg tekst toe")]
+		return [
+			placeholderPlugin("Voeg tekst toe"),
+			menuBar,
+			...super.plugins(),
+		]
 	}
 
 	getConfiguration(): DirectEditorProps {
@@ -26,7 +32,11 @@ class UnstyledTextEditor extends ProseBase<TextEditorProps> {
 					if (transaction.docChanged) {
 						const normalisation = normalize(transaction, editor.props.counter)
 						const newState = view.state.apply(normalisation.transaction)
-						editor.props.onStateChange(newState, normalisation.lastId)
+						view.updateState(newState)
+						window.clearTimeout(editor.updateTimer)
+						editor.updateTimer = window.setTimeout(() => {
+							editor.props.onStateChange(newState, normalisation.lastId)
+						}, 500)
 					} else {
 						view.updateState(view.state.apply(transaction))
 					}
@@ -37,8 +47,7 @@ class UnstyledTextEditor extends ProseBase<TextEditorProps> {
 	}
 }
 
-export const TextEditor = styled(UnstyledTextEditor)`
-`
+export const TextEditor = styled(UnstyledTextEditor)``
 
 function placeholderPlugin(placeholder: string) {
 	return new Plugin({

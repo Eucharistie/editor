@@ -1,5 +1,7 @@
 import {Schema} from 'prosemirror-model'
 import { Node as ProseNode } from 'prosemirror-model'
+import {orderedList} from "prosemirror-schema-list"
+import styled, {StyledComponent} from "styled-components"
 
 export const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;
 
@@ -56,6 +58,27 @@ const taggedLine = {
     }
 }
 
+export const songElements = {
+    song: {
+        ...orderedList,
+        content: 'verse*',
+    },
+    verse: {
+        defining: true,
+        content: '(text|hard_break)*',
+        attrs: {isRefrain: {default: false}},
+        toDOM: (node: ProseNode) => ['li', {class: node.attrs.isRefrain ? RefrainClassName : ''}, 0],
+        parseDOM: [{
+            tag: 'li',
+            getAttrs(dom: HTMLElement) {
+                if (dom.classList.contains(RefrainClassName)) {
+                    return {isRefrain: true}
+                }
+            }
+        }]
+    }
+}
+
 export const hard_break = {
     inline: true,
     selectable: false,
@@ -80,11 +103,20 @@ export const heading = {
 
 export const schema = new Schema({
     nodes: {
-        doc: {content: '(paragraph|heading)+'},
+        doc: {content: '(paragraph|heading|song)+'},
         paragraph: {
             content: "(text|hard_break)*",
-            parseDOM: [{tag: "p"}],
-            toDOM() { return ['p',0] }
+            attrs: {isRefrain: {default: false}},
+            toDOM: (node: ProseNode) => ['p', {class: node.attrs.isRefrain ? RefrainClassName : ''}, 0],
+            parseDOM: [{
+                tag: 'p',
+                // @ts-ignore
+                getAttrs(dom: HTMLElement) {
+                    if (dom.classList.contains(RefrainClassName)) {
+                        return {isRefrain: true}
+                    }
+                }
+            }]
         },
         text: {},
         // @ts-ignore
@@ -93,7 +125,8 @@ export const schema = new Schema({
         heading: {
             ...heading,
             content: 'text*'
-        }
+        },
+        ...songElements
     },
     // @ts-ignore
     marks: {
@@ -102,3 +135,7 @@ export const schema = new Schema({
         taggedLine
     }
 })
+
+export const Refrain = styled.span`` as StyledComponent<"span", any, {}, never> & {styledComponentId: string}
+
+const RefrainClassName = Refrain.styledComponentId

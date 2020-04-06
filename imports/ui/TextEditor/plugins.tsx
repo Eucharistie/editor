@@ -1,16 +1,20 @@
-import {inputRules, smartQuotes, undoInputRule} from "prosemirror-inputrules";
-import {keymap} from "prosemirror-keymap";
-import {history, redo, undo} from "prosemirror-history";
+import { inputRules, smartQuotes, undoInputRule} from "prosemirror-inputrules";
+import { keymap } from "prosemirror-keymap";
+import { history, redo, undo} from "prosemirror-history";
 import {
     baseKeymap,
     joinDown,
     joinUp,
     toggleMark
 } from "prosemirror-commands";
-import {dropCursor} from "prosemirror-dropcursor";
-import {gapCursor} from "prosemirror-gapcursor";
-import {mac, schema} from './schema'
+import { dropCursor} from "prosemirror-dropcursor";
+import { gapCursor} from "prosemirror-gapcursor";
+import { mac, schema} from './schema'
 import { EditorState, Transaction } from "prosemirror-state";
+import { toggleNodeAttribute } from './commands'
+import { menuItems } from './menu'
+import { menuBar as buildMenuBar } from "prosemirror-menu"
+
 
 function insertHardBreak(state: EditorState, dispatch?: (tr: Transaction) => boolean) {
     if (dispatch) {
@@ -23,6 +27,8 @@ function insertHardBreak(state: EditorState, dispatch?: (tr: Transaction) => boo
 const macCommands = !mac ? {} : {
 	"Ctrl-Enter": insertHardBreak
 }
+
+export const menuBar = buildMenuBar({content: menuItems.fullMenu})
 
 export const plugins = [
     inputRules({ rules: smartQuotes }),
@@ -39,10 +45,14 @@ export const plugins = [
         "Mod-Enter":   insertHardBreak,
         "Shift-Enter": insertHardBreak,
         "Ctrl-Alt-n": insertHardBreak,
-        ...macCommands
+        ...macCommands,
+        "Ctrl-r": toggleNodeAttribute([
+            schema.nodes.verse,
+            schema.nodes.paragraph
+        ], 'isRefrain')
     }),
     keymap(baseKeymap),
     dropCursor(),
     gapCursor(),
-    history(),
+    history()
 ]
