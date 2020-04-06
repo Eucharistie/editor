@@ -13,7 +13,7 @@ import {
 	layoutTextView,
 	HighlightCues
 } from './viewer-layout'
-import { TextLinker } from '/imports/ui/TextEditor/linker'
+import { TextLinker } from '../../../Components/TextEditor/body/linker'
 import ReactPlayer from 'react-player'
 
 export const SyncRecording = (props: {stream: Stream}) => {

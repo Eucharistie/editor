@@ -108,7 +108,10 @@ export const heading = {
 
 export const schema = new Schema({
     nodes: {
-        doc: {content: '(paragraph|heading|song)+'},
+        doc: {
+            content: '(paragraph|heading|song)+',
+            attrs: { version: {default: 1} }
+        },
         paragraph: {
             content: "(text|hard_break)*",
             attrs: {isRefrain: {default: false}},

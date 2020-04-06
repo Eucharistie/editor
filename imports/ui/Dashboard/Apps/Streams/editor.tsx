@@ -2,8 +2,8 @@ import React, {useState, useRef} from 'react';
 import {Stream, StreamsCollection} from '/imports/api/collections/Streams'
 import {BaseStyles, Box, Button, ButtonDanger, Dialog, Flex, TextInput} from '@primer/components'
 import moment from 'moment'
-import { paddedContainer } from '/imports/ui/style';
-import { TextEditor } from '/imports/ui/TextEditor/editor'
+import { paddedContainer, containerPadding } from '/imports/ui/style';
+import { TextEditor } from '../../../Components/TextEditor/body/editor'
 import { EditorState } from 'prosemirror-state';
 import ReactPlayer from 'react-player'
 import {faYoutube} from '@fortawesome/free-brands-svg-icons'
@@ -14,6 +14,7 @@ import {Link, navigate} from "@reach/router";
 import {HighlightCues} from "/imports/ui/Dashboard/Apps/Streams/viewer-layout";
 import {useTracker} from "meteor/react-meteor-data";
 import {CueTimeline} from "/imports/api/collections/Timeline";
+import styled from 'styled-components';
 
 export const StreamDetails = (props: {stream: Stream}) => {
 	function updateStream(textState: EditorState, lastId: number | null) {
@@ -71,7 +72,7 @@ export const StreamDetails = (props: {stream: Stream}) => {
 			</p>
 			<p>Created at: {moment(props.stream.createdAt).format()}</p>
 			<Box marginY={2}>
-				<ReactPlayer
+				<Player
 					url={props.stream.videoId}
 					playsInline={true}
 					onError={logError}
@@ -115,6 +116,10 @@ export const StreamDetails = (props: {stream: Stream}) => {
 		</Box>
 	)
 }
+
+const Player = styled(ReactPlayer)`
+	max-width: calc(100vw - 48px);
+`
 
 interface VideoData {
 	video_id: string

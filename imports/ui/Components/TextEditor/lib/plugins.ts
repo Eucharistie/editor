@@ -13,7 +13,6 @@ import { mac, schema} from './schema'
 import { EditorState, Transaction } from "prosemirror-state";
 import { toggleNodeAttribute } from './commands'
 
-
 function insertHardBreak(state: EditorState, dispatch?: (tr: Transaction) => boolean) {
     if (dispatch) {
         dispatch(state.tr

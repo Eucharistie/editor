@@ -1,7 +1,7 @@
 // Prose mirror
 import {DirectEditorProps, EditorView} from "prosemirror-view"
 import { ProseBase } from './base'
-import {hasLineTag} from './tagger'
+import {hasLineTag} from '../lib/tagger'
 import styled from 'styled-components'
 import { CuePoint } from '/imports/api/collections/Timeline'
 
@@ -25,12 +25,12 @@ class UnstyledTextLinker extends ProseBase<TextLinkerProps> {
 		return false
 	}
 
-	getConfiguration(): DirectEditorProps {
+	getViewConfiguration(): DirectEditorProps {
 		const editor = this
 		return {
 			editable() {return false},
 			handleClickOn: (view, pos, _i, _s, event) => editor.link(view, pos, event),
-			...super.getConfiguration()
+			...super.getViewConfiguration()
 		}
 	}
 }

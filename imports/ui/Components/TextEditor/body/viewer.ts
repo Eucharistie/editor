@@ -6,10 +6,10 @@ import 'styled-components'
 interface TextViewerProps {}
 
 export class TextViewer extends ProseBase<TextViewerProps> {
-	getConfiguration(): DirectEditorProps {
+	getViewConfiguration(): DirectEditorProps {
 		return {
 			editable() {return false},
-			...super.getConfiguration()
+			...super.getViewConfiguration()
 		}
 	}
 }

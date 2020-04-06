@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react'
 import { Stream } from '/imports/api/collections/Streams'
 import { Player, PlayerContainer, TextContainer, FadedBackground, layoutTextView } from './viewer-layout'
-import { TextViewer } from '/imports/ui/TextEditor/viewer'
+import { TextViewer } from '../../../Components/TextEditor/body/viewer'
 import { useTracker } from "meteor/react-meteor-data";
 import { CueTimeline, CuePoint } from '/imports/api/collections/Timeline'
 // @ts-ignore

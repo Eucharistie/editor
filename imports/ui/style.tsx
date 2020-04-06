@@ -11,3 +11,5 @@ export const containerPadding = {
 export const paddedContainer = {...centeredContainer, ...containerPadding}
 
 export const blue = '#438dcc'
+
+export const liturgyFont = '"Liturgy", "Palatino", serif'
