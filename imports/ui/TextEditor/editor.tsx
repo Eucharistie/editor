@@ -6,8 +6,6 @@ import { normalize } from './tagger'
 import { ProseBase } from './base'
 import styled from 'styled-components'
 import { Plugin } from "prosemirror-state"
-import 'prosemirror-menu/style/menu.css'
-import {menuBar} from './plugins'
 
 interface TextEditorProps {
 	onStateChange: (state: EditorState, lastId: number | null) => void
@@ -18,7 +16,6 @@ class UnstyledTextEditor extends ProseBase<TextEditorProps> {
 	plugins() {
 		return [
 			placeholderPlugin("Voeg tekst toe"),
-			menuBar,
 			...super.plugins(),
 		]
 	}

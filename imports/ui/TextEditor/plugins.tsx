@@ -12,8 +12,6 @@ import { gapCursor} from "prosemirror-gapcursor";
 import { mac, schema} from './schema'
 import { EditorState, Transaction } from "prosemirror-state";
 import { toggleNodeAttribute } from './commands'
-import { menuItems } from './menu'
-import { menuBar as buildMenuBar } from "prosemirror-menu"
 
 
 function insertHardBreak(state: EditorState, dispatch?: (tr: Transaction) => boolean) {
@@ -27,8 +25,6 @@ function insertHardBreak(state: EditorState, dispatch?: (tr: Transaction) => boo
 const macCommands = !mac ? {} : {
 	"Ctrl-Enter": insertHardBreak
 }
-
-export const menuBar = buildMenuBar({content: menuItems.fullMenu})
 
 export const plugins = [
     inputRules({ rules: smartQuotes }),

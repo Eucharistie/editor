@@ -1,6 +1,5 @@
 import {Schema} from 'prosemirror-model'
 import { Node as ProseNode } from 'prosemirror-model'
-import {orderedList} from "prosemirror-schema-list"
 import styled, {StyledComponent} from "styled-components"
 
 export const mac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;
@@ -60,8 +59,14 @@ const taggedLine = {
 
 export const songElements = {
     song: {
-        ...orderedList,
         content: 'verse*',
+        attrs: {order: {default: 1}},
+        parseDOM: [{tag: "ol", getAttrs(dom: HTMLElement) {
+            return {order: parseInt(dom.getAttribute("start") ?? '1')}
+        }}],
+        toDOM(node: ProseNode) {
+            return node.attrs.order == 1 ? ["ol", 0] : ["ol", {start: node.attrs.order}, 0]
+        }
     },
     verse: {
         defining: true,
